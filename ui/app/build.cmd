@@ -1,0 +1,1 @@
+set PUBLIC_URL=/static&&yarn build

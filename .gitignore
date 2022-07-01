@@ -1,0 +1,10 @@
+**/__pycache__/
+**/node_modules/
+**/.build.zip
+*.sqlite3
+.env
+.idea
+.venv
+alice_planner/logs
+alice_planner/static
+ui/app/build
