@@ -1,5 +1,17 @@
+.ant-layout {
+  min-width: 300px;
+}
+
+.checklist-table {
+  margin-bottom: 2rem;
+}
+
 .ant-layout.ant-layout-has-sider {
   height: 100%;
+}
+
+.app-skeleton {
+  padding: 5rem;
 }
 
 .main-content {

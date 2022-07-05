@@ -1,0 +1,19 @@
+query checklists {
+  checklists {
+    id
+    items {
+      description
+      due
+      id
+      people {
+        id
+        avatar
+        color
+        name
+        surname
+      }
+      status
+    }
+    name
+  }
+}

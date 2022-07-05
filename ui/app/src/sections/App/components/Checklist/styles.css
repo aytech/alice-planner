@@ -1,0 +1,33 @@
+.ant-btn.button-green {
+  color: #fff;
+  background-color: #52c41a;
+}
+
+.ant-btn.button-orange {
+  color: #fff;
+  background-color: #fa8c16;
+}
+
+.ant-btn.button-green:hover, .ant-btn.button-green:focus {
+  border-color: #52c41a;
+  color: #fff;
+}
+
+.ant-btn.button-orange:hover, .ant-btn.button-orange:focus {
+  border-color: #d87205;
+  color: #fff;
+}
+
+.ant-btn.button-green:active {
+  border-color: #3f9714;
+  color: #fff;
+}
+
+.ant-btn.button-orange:active {
+  border-color: #fa8c16;
+  color: #fff;
+}
+
+.ant-btn.status-button {
+  width: 100%;
+}

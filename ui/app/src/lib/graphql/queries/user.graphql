@@ -1,5 +1,5 @@
-query settings {
-  settings {
+query user {
+  user {
     id
     avatar
     color

@@ -4,8 +4,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from graphene import Field
 from graphql_jwt import JSONWebTokenMutation
 
-from api.schemas.Settings import Settings
-from api.models.Settings import Settings as SettingsModel
+from api.schemas.User import User
+from api.models.User import User as UserModel
 
 
 class Color:
@@ -31,12 +31,12 @@ class Color:
 
 
 class ObtainJSONWebToken(JSONWebTokenMutation):
-    settings = Field(Settings)
+    settings = Field(User)
 
     @classmethod
     def resolve(cls, _root, info, **kwargs):
         try:
-            settings = SettingsModel.objects.get(username=info.context.user)
+            settings = UserModel.objects.get(username=info.context.user, deleted=False)
             return cls(settings=settings)
         except ObjectDoesNotExist:
-            return cls(settings=Settings())
+            return cls(settings=User())

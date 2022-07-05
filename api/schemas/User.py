@@ -3,31 +3,31 @@ from graphene import ObjectType, Field, Mutation, InputObjectType, String, ID
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import user_passes_test
 
-from api.models.Settings import Settings as SettingsModel
+from api.models.User import User as UserModel
 from api.schemas.exceptions.PermissionDenied import PermissionDenied
 from api.schemas.helpers.FormHelper import FormHelper
 
 
-class Settings(DjangoObjectType):
+class User(DjangoObjectType):
     class Meta:
-        model = SettingsModel
+        model = UserModel
         fields = ('avatar', 'color', 'email', 'id', 'name', 'surname')
 
 
-class SettingsQuery(ObjectType):
-    settings = Field(Settings)
+class UserQuery(ObjectType):
+    user = Field(User)
 
     @classmethod
-    def resolve_settings(cls, _root, info):
+    def resolve_user(cls, _root, info):
         if info.context.user.is_anonymous is True:
             return None
         try:
-            return SettingsModel.objects.get(username=info.context.user.username)
+            return UserModel.objects.get(email=info.context.user.email, deleted=False)
         except ObjectDoesNotExist:
             return None
 
 
-class SettingsInput(InputObjectType):
+class UserInput(InputObjectType):
     avatar = String()
     color = String()
     id = ID()
@@ -35,17 +35,17 @@ class SettingsInput(InputObjectType):
     surname = String()
 
 
-class UpdateSettings(Mutation):
+class UpdateUser(Mutation):
     class Arguments:
-        data = SettingsInput(required=True)
+        data = UserInput(required=True)
 
-    settings = Field(Settings)
+    settings = Field(User)
 
     @classmethod
     @user_passes_test(lambda user: user.has_perm('api.change_settings'), exc=PermissionDenied)
     def mutate(cls, _root, _info, data=None):
         try:
-            instance = SettingsModel.objects.get(pk=data.id)
+            instance = UserModel.objects.get(pk=data.id)
             if instance:
                 instance.avatar = FormHelper.get_value(data.avatar, instance.avatar)
                 instance.color = FormHelper.get_value(data.color, instance.color)
@@ -59,6 +59,6 @@ class UpdateSettings(Mutation):
 
                 instance.save()
 
-            return UpdateSettings(settings=instance)
+            return UpdateUser(settings=instance)
         except ObjectDoesNotExist:
-            return UpdateSettings(settings=None)
+            return UpdateUser(settings=None)

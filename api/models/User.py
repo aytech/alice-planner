@@ -3,7 +3,7 @@ from django.db import models
 from api.models.Base import Base
 
 
-class Settings(Base):
+class User(Base):
     avatar = models.CharField(blank=True, max_length=150, null=True)
     color = models.CharField(blank=True, max_length=50, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -15,4 +15,7 @@ class Settings(Base):
 
     class Meta:
         default_permissions = ()
-        permissions = [('change_settings', 'Can change settings')]
+        permissions = [('change_user', 'Can change user')]
+
+    def __str__(self):
+        return '{} {}'.format(self.name, self.surname)

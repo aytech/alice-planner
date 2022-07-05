@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "active": "Seznam",
+    "archived": "Archiv"
+  },
+  "statuses": {
+    "DONE": "Hotový",
+    "IN_PROGRESS": "Probíhá",
+    "NOT_STARTED": "N/A"
+  }
+}

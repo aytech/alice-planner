@@ -14,6 +14,12 @@ export type Scalars = {
   Int: number;
   Float: number;
   /**
+   * The `Date` scalar type represents a Date
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+   */
+  Date: any;
+  /**
    * The `GenericScalar` scalar type represents a generic
    * GraphQL scalar value that could be:
    * String, Boolean, Int, Float, List or Object.
@@ -30,12 +36,39 @@ export type AppUser = {
   username: Scalars['String'];
 };
 
+export type Checklist = {
+  __typename?: 'Checklist';
+  id: Scalars['ID'];
+  items: Array<ChecklistItem>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type ChecklistItem = {
+  __typename?: 'ChecklistItem';
+  description: Scalars['String'];
+  due: Scalars['Date'];
+  id: Scalars['ID'];
+  list: Checklist;
+  people: Array<User>;
+  status: ChecklistItemStatus;
+};
+
+/** An enumeration. */
+export enum ChecklistItemStatus {
+  /** DONE */
+  Done = 'DONE',
+  /** In progress */
+  InProgress = 'IN_PROGRESS',
+  /** N/A */
+  NotStarted = 'NOT_STARTED'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   refreshToken?: Maybe<Refresh>;
   revokeToken?: Maybe<Revoke>;
   tokenAuth?: Maybe<ObtainJsonWebToken>;
-  updateSettings?: Maybe<UpdateSettings>;
+  updateUser?: Maybe<UpdateUser>;
   verifyToken?: Maybe<Verify>;
 };
 
@@ -56,8 +89,8 @@ export type MutationTokenAuthArgs = {
 };
 
 
-export type MutationUpdateSettingsArgs = {
-  data: SettingsInput;
+export type MutationUpdateUserArgs = {
+  data: UserInput;
 };
 
 
@@ -70,14 +103,16 @@ export type ObtainJsonWebToken = {
   payload: Scalars['GenericScalar'];
   refreshExpiresIn: Scalars['Int'];
   refreshToken: Scalars['String'];
-  settings?: Maybe<Settings>;
+  settings?: Maybe<User>;
   token: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   appUser?: Maybe<AppUser>;
-  settings?: Maybe<Settings>;
+  checklist?: Maybe<ChecklistItem>;
+  checklists?: Maybe<Array<Maybe<Checklist>>>;
+  user?: Maybe<User>;
 };
 
 export type Refresh = {
@@ -93,27 +128,27 @@ export type Revoke = {
   revoked: Scalars['Int'];
 };
 
-export type Settings = {
-  __typename?: 'Settings';
+export type UpdateUser = {
+  __typename?: 'UpdateUser';
+  settings?: Maybe<User>;
+};
+
+export type User = {
+  __typename?: 'User';
   avatar?: Maybe<Scalars['String']>;
   color?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   surname?: Maybe<Scalars['String']>;
-  username: Scalars['String'];
 };
 
-export type SettingsInput = {
+export type UserInput = {
   avatar?: InputMaybe<Scalars['String']>;
   color?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   name?: InputMaybe<Scalars['String']>;
   surname?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateSettings = {
-  __typename?: 'UpdateSettings';
-  settings?: Maybe<Settings>;
 };
 
 export type Verify = {
@@ -141,17 +176,22 @@ export type TokenAuthMutationVariables = Exact<{
 }>;
 
 
-export type TokenAuthMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', payload: any, refreshExpiresIn: number, refreshToken: string, token: string, settings?: { __typename?: 'Settings', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null } | null };
+export type TokenAuthMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', payload: any, refreshExpiresIn: number, refreshToken: string, token: string, settings?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null } | null };
 
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AppQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser', color: string, id: number, name?: string | null, surname?: string | null, username: string } | null };
 
-export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ChecklistsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'Settings', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null };
+export type ChecklistsQuery = { __typename?: 'Query', checklists?: Array<{ __typename?: 'Checklist', id: string, name?: string | null, items: Array<{ __typename?: 'ChecklistItem', description: string, due: any, id: string, status: ChecklistItemStatus, people: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null }> }> } | null> | null };
+
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null };
 
 
 export const RefreshTokenDocument = gql`
@@ -305,9 +345,57 @@ export function useAppLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppQue
 export type AppQueryHookResult = ReturnType<typeof useAppQuery>;
 export type AppLazyQueryHookResult = ReturnType<typeof useAppLazyQuery>;
 export type AppQueryResult = Apollo.QueryResult<AppQuery, AppQueryVariables>;
-export const SettingsDocument = gql`
-    query settings {
-  settings {
+export const ChecklistsDocument = gql`
+    query checklists {
+  checklists {
+    id
+    items {
+      description
+      due
+      id
+      people {
+        id
+        avatar
+        color
+        name
+        surname
+      }
+      status
+    }
+    name
+  }
+}
+    `;
+
+/**
+ * __useChecklistsQuery__
+ *
+ * To run a query within a React component, call `useChecklistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChecklistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChecklistsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useChecklistsQuery(baseOptions?: Apollo.QueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+      }
+export function useChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+        }
+export type ChecklistsQueryHookResult = ReturnType<typeof useChecklistsQuery>;
+export type ChecklistsLazyQueryHookResult = ReturnType<typeof useChecklistsLazyQuery>;
+export type ChecklistsQueryResult = Apollo.QueryResult<ChecklistsQuery, ChecklistsQueryVariables>;
+export const UserDocument = gql`
+    query user {
+  user {
     id
     avatar
     color
@@ -318,28 +406,28 @@ export const SettingsDocument = gql`
     `;
 
 /**
- * __useSettingsQuery__
+ * __useUserQuery__
  *
- * To run a query within a React component, call `useSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSettingsQuery({
+ * const { data, loading, error } = useUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useSettingsQuery(baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
       }
-export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
         }
-export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
-export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
-export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
