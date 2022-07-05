@@ -1,0 +1,11 @@
+type AppUser {
+  color: String!
+  id: Int!
+  name: String
+  surname: String
+  username: String!
+}
+
+extend type Query {
+  appUser: AppUser
+}

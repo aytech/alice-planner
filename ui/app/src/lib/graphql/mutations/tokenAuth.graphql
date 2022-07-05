@@ -1,0 +1,15 @@
+mutation tokenAuth($username: String!, $password: String!) {
+  tokenAuth(username: $username, password: $password) {
+    payload
+    refreshExpiresIn
+    refreshToken
+    token
+    settings {
+      id
+      avatar
+      color
+      name
+      surname
+    }
+  }
+}

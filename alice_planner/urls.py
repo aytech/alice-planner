@@ -17,8 +17,11 @@ import os
 
 from django.contrib import admin
 from django.urls import re_path
+from django.views.decorators.csrf import csrf_exempt
 from django.views.static import serve
+from graphene_django.views import GraphQLView
 
+from api.schema import schema
 from ui import views as ui
 
 env = os.environ['DJANGO_SETTINGS_MODULE']
@@ -32,6 +35,11 @@ urlpatterns = [
 
     # Client UI routes
     re_path(r'^$', ui.home, name='home'),
+    re_path(r'^login$', ui.login, name='login'),
+
+    # GraphQL
+    re_path(r'^api$', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
+
     # Admin section
     re_path('admin/', admin.site.urls),
 
@@ -39,4 +47,12 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve, {
         'document_root': settings.STATIC_ROOT,
     }),
+
+    # UI locales
+    re_path(r'^locales/(?P<path>.*)$', serve, {
+        'document_root': settings.LOCALES_ROOT,
+    }),
+
+    # Catch all
+    re_path(r'^(?P<path>.*)$', ui.page_not_found, name='404'),
 ]

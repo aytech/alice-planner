@@ -1,0 +1,9 @@
+query settings {
+  settings {
+    id
+    avatar
+    color
+    name
+    surname
+  }
+}

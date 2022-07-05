@@ -1,6 +1,6 @@
 **/__pycache__/
 **/node_modules/
-**/.build.zip
+**/build.zip
 *.sqlite3
 .env
 .idea

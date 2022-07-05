@@ -1,0 +1,18 @@
+from django.db import models
+
+from api.models.Base import Base
+
+
+class Settings(Base):
+    avatar = models.CharField(blank=True, max_length=150, null=True)
+    color = models.CharField(blank=True, max_length=50, null=True)
+    created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    deleted = models.BooleanField(default=False)
+    email = models.CharField(blank=False, max_length=100, null=False)
+    name = models.CharField(blank=True, max_length=100, null=True)
+    surname = models.CharField(blank=True, max_length=100, null=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        default_permissions = ()
+        permissions = [('change_settings', 'Can change settings')]

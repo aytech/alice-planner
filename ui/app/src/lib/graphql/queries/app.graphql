@@ -1,0 +1,9 @@
+query App {
+  appUser @client {
+    color
+    id
+    name
+    surname
+    username
+  }
+}
