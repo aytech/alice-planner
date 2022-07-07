@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { appSettings } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
-import { ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
-import { IChecklistTable } from "../../lib/Types"
+import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
+import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
 import { Checklist } from "./components/Checklist"
 import { NavColumn } from "./components/NavColumn"
 import "./styles.css"
@@ -45,17 +45,30 @@ export const App = () => {
     const list: IChecklistTable[] = []
     listsData?.checklists?.forEach(checklist => {
       if (checklist !== null) {
+        const listItems = checklist.items.map((item): IChecklistTableItem => {
+          return {
+            description: item.description,
+            due: item.due,
+            editable: true,
+            key: item.id.toString(),
+            id: item.id,
+            people: item.people,
+            status: item.status
+          }
+        })
         list.push({
           ...checklist,
-          items: checklist.items.map(item => {
-            return {
-              description: item.description,
-              due: item.due,
-              key: item.id.toString(),
-              people: item.people,
-              status: item.status
-            }
-          })
+          items: [ {
+            editable: true,
+            key: '0',
+            id: '0',
+            people: [ {
+              id: '0',
+              avatar: null,
+              name: 'U'
+            } ] as Array<IUser>,
+            status: ChecklistItemStatus.NotStarted
+          } ].concat(listItems)
         })
       }
     })

@@ -19,7 +19,7 @@ export interface IToken {
 }
 
 export interface IUser {
-  id: string
+  id?: string
   avatar?: string | null
   color?: string | null
   name?: string | null
@@ -27,12 +27,12 @@ export interface IUser {
 }
 
 export interface IChecklistTableItem {
-  description: string
-  due: string
-  editable?: boolean
-  id?: string
+  description?: string
+  due?: string
+  editable: boolean
+  id: string
   key: string
-  people?: Array<IUser>
+  people: Array<IUser>
   status: ChecklistItemStatus
 }
 

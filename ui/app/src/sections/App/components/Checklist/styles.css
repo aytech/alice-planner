@@ -9,11 +9,13 @@
 }
 
 .ant-btn.button-green:hover, .ant-btn.button-green:focus {
+  background-color: #52c41a;
   border-color: #52c41a;
   color: #fff;
 }
 
 .ant-btn.button-orange:hover, .ant-btn.button-orange:focus {
+  background-color: #fa8c16;
   border-color: #d87205;
   color: #fff;
 }
@@ -28,6 +30,25 @@
   color: #fff;
 }
 
+.ant-btn.people-trigger {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+}
+
+.ant-btn.people-trigger:active,
+.ant-btn.people-trigger:focus,
+.ant-btn.people-trigger:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
 .ant-btn.status-button {
   width: 100%;
+}
+
+.ant-form-item.description {
+  margin-bottom: 0;
 }
