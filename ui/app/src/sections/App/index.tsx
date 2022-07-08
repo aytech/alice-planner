@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { appSettings } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
-import { ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
-import { IChecklistTable, IChecklistTableItem } from "../../lib/Types"
+import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
+import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
 import { Checklist } from "./components/Checklist"
 import { NavColumn } from "./components/NavColumn"
 import "./styles.css"
@@ -20,7 +20,7 @@ export const App = () => {
 
   const [ collapsed, setCollapsed ] = useState(false);
   const [ checklists, setChecklists ] = useState<IChecklistTable[]>([])
-  const [ editingRecordKey, setEditingRecordKey ] = useState('');
+  const [ editingRecordKey, setEditingRecordKey ] = useState('0');
 
   const { loading: settingsLoading } = useQuery<UserQuery>(UserDocument, {
     onCompleted: (value: UserQuery) => {
@@ -50,15 +50,24 @@ export const App = () => {
           return {
             description: item.description,
             due: item.due,
-            key: item.id.toString(),
             id: item.id,
+            key: item.id.toString(),
             people: item.people,
-            status: item.status
+            status: item.status,
+            tableKey: checklist.id.toString()
           }
         })
         list.push({
           ...checklist,
-          items: listItems
+          items: [ {
+            id: '0',
+            key: '0',
+            people: [ {
+              id: '0'
+            } ] as Array<IUser>,
+            status: ChecklistItemStatus.NotStarted,
+            tableKey: checklist.id.toString()
+          } ].concat(listItems)
         })
       }
     })

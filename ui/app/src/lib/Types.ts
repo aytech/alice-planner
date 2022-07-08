@@ -33,6 +33,7 @@ export interface IChecklistTableItem {
   key: string
   people: Array<IUser>
   status: ChecklistItemStatus
+  tableKey: string
 }
 
 export interface IChecklistTable {

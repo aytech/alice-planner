@@ -1,4 +1,4 @@
-import { Avatar, Button, DatePicker, Dropdown, Form, Input, Menu, Popconfirm, Space, Table, Tooltip, Typography } from "antd"
+import { Avatar, Button, DatePicker, Dropdown, Form, Input, Menu, Space, Table, Tooltip, Typography } from "antd"
 import { useTranslation } from "react-i18next"
 import { ChecklistItemStatus } from "../../../../lib/graphql/graphql"
 import { IChecklistTable, IChecklistTableItem, IUser } from "../../../../lib/Types"
@@ -16,15 +16,25 @@ const statusButtonClassName = (statusName: ChecklistItemStatus): string => {
 }
 
 const EditableCell = ({
+  children,
   editing,
   dataIndex,
-  title,
-  inputType,
-  record,
   index,
-  children,
+  inputType,
+  ondatechange,
+  record,
+  title,
   ...restProps
-}: { editing: any, dataIndex: any, title: any, inputType: any, record: any, index: any, children: any }) => {
+}: {
+  children: any,
+  editing: any,
+  dataIndex: any,
+  index: any,
+  inputType: any,
+  ondatechange: (date: string) => void,
+  record: IChecklistTableItem,
+  title: any
+}) => {
 
   const { t } = useTranslation()
 
@@ -35,7 +45,7 @@ const EditableCell = ({
           { editing ? (
             <Form.Item
               className="description"
-              name={ dataIndex }>
+              name={ `${ dataIndex }-${ record.tableKey }` }>
               <Input />
             </Form.Item>
           ) : children }
@@ -79,7 +89,9 @@ const EditableCell = ({
           { editing ? (
             <Space direction="vertical">
               <DatePicker
-                onChange={ (date, dateString) => console.log(date, dateString) }
+                onChange={ (_: any, dateString: string) => {
+                  ondatechange(dateString)
+                } }
                 placeholder={ t("due-date") } />
             </Space>
           ) : children }
@@ -148,8 +160,16 @@ export const Checklist = ({
       due: '',
       ...record,
     });
-    setEditingRecordKey(record.id);
-  };
+    setEditingRecordKey(record.id)
+  }
+
+  const cancel = () => {
+    form.setFieldsValue({
+      description: '',
+      due: ''
+    });
+    setEditingRecordKey('0')
+  }
 
   const columns = [
     {
@@ -195,27 +215,37 @@ export const Checklist = ({
     {
       dataIndex: 'operation',
       render: (_: any, record: IChecklistTableItem) => {
+        if (record.id === '0' && editingRecordKey === '0') {
+          return (
+            <Typography.Link
+              onClick={ () => {
+                console.log(`description ${ form.getFieldValue('description-' + record.tableKey) }`)
+                console.log(`due ${ form.getFieldValue('due') }`)
+                console.log(`people ${ form.getFieldValue('people') }`)
+                console.log(`status ${ form.getFieldValue('status') }`)
+              } }>
+              { t("save") }
+            </Typography.Link>
+          )
+        }
         const editable = isEditing(record);
         return editable ? (
           <span>
             <Typography.Link
-              onClick={ () => console.log(`saving ${ record.key }`) }
+              onClick={ () => console.log(`saving ${ form.getFieldValue('description') }`) }
               style={ {
                 marginRight: 8,
               } }>
               { t("save") }
             </Typography.Link>
-            <Popconfirm
-              title={ `${ t("cancel") }?` }
-              onConfirm={ () => setEditingRecordKey('') }>
-              <Typography.Link>
-                { t("cancel") }
-              </Typography.Link>
-            </Popconfirm>
+            <Typography.Link
+              onClick={ cancel }>
+              { t("cancel") }
+            </Typography.Link>
           </span>
         ) : (
           <Typography.Link
-            disabled={ editingRecordKey !== '' }
+            disabled={ editingRecordKey !== '0' }
             onClick={ () => edit(record) }>
             { t("edit") }
           </Typography.Link>
@@ -228,12 +258,15 @@ export const Checklist = ({
   const mergedColumns = columns.map(column => {
     return {
       ...column,
-      onCell: (record: any) => ({
-        record,
-        inputType: 'text',
-        dataIndex: column.dataIndex,
-        title: column.title,
+      onCell: (record: IChecklistTableItem) => ({
         editing: isEditing(record),
+        dataIndex: column.dataIndex,
+        inputType: 'text',
+        record,
+        title: column.title,
+        ondatechange: (date: string) => {
+          form.setFieldsValue({ 'due': date })
+        }
       }),
     }
   })
