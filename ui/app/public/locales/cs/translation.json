@@ -1,8 +1,12 @@
 {
+  "cancel": "Zrušit",
+  "due-date": "Splatnost",
+  "edit": "Upravit",
   "nav": {
     "active": "Seznam",
     "archived": "Archiv"
   },
+  "save": "Uložit",
   "statuses": {
     "DONE": "Hotový",
     "IN_PROGRESS": "Probíhá",

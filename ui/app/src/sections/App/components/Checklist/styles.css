@@ -8,13 +8,15 @@
   background-color: #fa8c16;
 }
 
-.ant-btn.button-green:hover, .ant-btn.button-green:focus {
+.ant-btn.button-green:hover,
+.ant-btn.button-green:focus {
   background-color: #52c41a;
   border-color: #52c41a;
   color: #fff;
 }
 
-.ant-btn.button-orange:hover, .ant-btn.button-orange:focus {
+.ant-btn.button-orange:hover,
+.ant-btn.button-orange:focus {
   background-color: #fa8c16;
   border-color: #d87205;
   color: #fff;
@@ -47,6 +49,10 @@
 
 .ant-btn.status-button {
   width: 100%;
+}
+
+.ant-dropdown-menu-item {
+  text-align: center;
 }
 
 .ant-form-item.description {

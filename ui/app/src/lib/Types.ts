@@ -29,7 +29,6 @@ export interface IUser {
 export interface IChecklistTableItem {
   description?: string
   due?: string
-  editable: boolean
   id: string
   key: string
   people: Array<IUser>

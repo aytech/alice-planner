@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { appSettings } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
-import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
-import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
+import { ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
+import { IChecklistTable, IChecklistTableItem } from "../../lib/Types"
 import { Checklist } from "./components/Checklist"
 import { NavColumn } from "./components/NavColumn"
 import "./styles.css"
@@ -20,6 +20,7 @@ export const App = () => {
 
   const [ collapsed, setCollapsed ] = useState(false);
   const [ checklists, setChecklists ] = useState<IChecklistTable[]>([])
+  const [ editingRecordKey, setEditingRecordKey ] = useState('');
 
   const { loading: settingsLoading } = useQuery<UserQuery>(UserDocument, {
     onCompleted: (value: UserQuery) => {
@@ -49,7 +50,6 @@ export const App = () => {
           return {
             description: item.description,
             due: item.due,
-            editable: true,
             key: item.id.toString(),
             id: item.id,
             people: item.people,
@@ -58,17 +58,7 @@ export const App = () => {
         })
         list.push({
           ...checklist,
-          items: [ {
-            editable: true,
-            key: '0',
-            id: '0',
-            people: [ {
-              id: '0',
-              avatar: null,
-              name: 'U'
-            } ] as Array<IUser>,
-            status: ChecklistItemStatus.NotStarted
-          } ].concat(listItems)
+          items: listItems
         })
       }
     })
@@ -103,8 +93,10 @@ export const App = () => {
             } }>
             { checklists.map((list: IChecklistTable) => (
               <Checklist
+                editingRecordKey={ editingRecordKey }
                 key={ list.id }
-                list={ list } />
+                list={ list }
+                setEditingRecordKey={ setEditingRecordKey } />
             )) }
           </Content>
         </Layout>
