@@ -1,7 +1,12 @@
+import { ChecklistItemStatus } from "./graphql/graphql"
 import { AppReferrer } from "./Types"
 
 interface IUrlHelper {
   getReferrer: () => AppReferrer
+}
+
+interface IChecklistHelper {
+  statusButtonClassName: (statusName: ChecklistItemStatus) => string
 }
 
 export const UrlHelper: IUrlHelper = {
@@ -11,5 +16,18 @@ export const UrlHelper: IUrlHelper = {
       return urlParts[ 1 ] as AppReferrer
     }
     return "/"
+  }
+}
+
+export const ChecklistHelper: IChecklistHelper = {
+  statusButtonClassName: (statusName: ChecklistItemStatus): string => {
+    switch (statusName) {
+      case ChecklistItemStatus.Done:
+        return 'status-button button-green'
+      case ChecklistItemStatus.InProgress:
+        return 'status-button button-orange'
+      default:
+        return 'status-button'
+    }
   }
 }

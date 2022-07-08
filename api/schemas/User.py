@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from graphene import ObjectType, Field, Mutation, InputObjectType, String, ID
+from graphene import ObjectType, Field, Mutation, InputObjectType, String, ID, List
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import user_passes_test
 
@@ -16,6 +16,14 @@ class User(DjangoObjectType):
 
 class UserQuery(ObjectType):
     user = Field(User)
+    users = List(User)
+
+    @classmethod
+    def resolve_users(cls, _root, info):
+        try:
+            return UserModel.objects.filter(deleted=False)
+        except ObjectDoesNotExist:
+            return None
 
     @classmethod
     def resolve_user(cls, _root, info):

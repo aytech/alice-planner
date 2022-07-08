@@ -113,6 +113,7 @@ export type Query = {
   checklist?: Maybe<ChecklistItem>;
   checklists?: Maybe<Array<Maybe<Checklist>>>;
   user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 export type Refresh = {
@@ -186,7 +187,7 @@ export type AppQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser
 export type ChecklistsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ChecklistsQuery = { __typename?: 'Query', checklists?: Array<{ __typename?: 'Checklist', id: string, name?: string | null, items: Array<{ __typename?: 'ChecklistItem', description: string, due: any, id: string, status: ChecklistItemStatus, people: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null }> }> } | null> | null };
+export type ChecklistsQuery = { __typename?: 'Query', checklists?: Array<{ __typename?: 'Checklist', id: string, name?: string | null, items: Array<{ __typename?: 'ChecklistItem', description: string, due: any, id: string, status: ChecklistItemStatus, people: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null }> }> } | null> | null, users?: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null> | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -363,6 +364,13 @@ export const ChecklistsDocument = gql`
       status
     }
     name
+  }
+  users {
+    id
+    avatar
+    color
+    name
+    surname
   }
 }
     `;

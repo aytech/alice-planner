@@ -16,4 +16,11 @@ query checklists {
     }
     name
   }
+  users {
+    id
+    avatar
+    color
+    name
+    surname
+  }
 }

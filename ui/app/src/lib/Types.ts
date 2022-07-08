@@ -19,7 +19,7 @@ export interface IToken {
 }
 
 export interface IUser {
-  id?: string
+  id: string
   avatar?: string | null
   color?: string | null
   name?: string | null

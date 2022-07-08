@@ -4,7 +4,7 @@ import { Skeleton } from "antd"
 import Layout, { Content, Header } from "antd/lib/layout/layout"
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import { appSettings } from "../../cache"
+import { appSettings, peopleData } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
 import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
 import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
@@ -44,6 +44,7 @@ export const App = () => {
 
   useEffect(() => {
     const list: IChecklistTable[] = []
+    const userItems: IUser[] = []
     listsData?.checklists?.forEach(checklist => {
       if (checklist !== null) {
         const listItems = checklist.items.map((item): IChecklistTableItem => {
@@ -71,7 +72,13 @@ export const App = () => {
         })
       }
     })
+    listsData?.users?.forEach(user => {
+      if (user !== null) {
+        userItems.push(user)
+      }
+    })
     setChecklists(list)
+    peopleData(userItems)
   }, [ listsData ])
 
   return (
