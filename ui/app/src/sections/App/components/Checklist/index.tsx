@@ -39,6 +39,10 @@ export const Checklist = ({
     setEditingRecordKey('0')
   }
 
+  const save = () => {
+    console.log(`saving: ${ form.getFieldValue('people') }`)
+  }
+
   const columns = [
     {
       dataIndex: 'description',
@@ -86,12 +90,7 @@ export const Checklist = ({
         if (record.id === '0' && editingRecordKey === '0') {
           return (
             <Typography.Link
-              onClick={ () => {
-                console.log(`description ${ form.getFieldValue('description-' + record.tableKey) }`)
-                console.log(`due ${ form.getFieldValue('due') }`)
-                console.log(`people ${ form.getFieldValue('people') }`)
-                console.log(`status ${ form.getFieldValue('status') }`)
-              } }>
+              onClick={ save }>
               { t("save") }
             </Typography.Link>
           )
@@ -127,8 +126,9 @@ export const Checklist = ({
     return {
       ...column,
       onCell: (record: IChecklistTableItem) => ({
-        editing: isEditing(record),
         dataIndex: column.dataIndex,
+        editing: isEditing(record),
+        form,
         inputType: 'text',
         record,
         title: column.title,

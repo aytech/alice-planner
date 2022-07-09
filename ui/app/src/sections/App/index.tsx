@@ -63,9 +63,7 @@ export const App = () => {
           items: [ {
             id: '0',
             key: '0',
-            people: [ {
-              id: '0'
-            } ] as Array<IUser>,
+            people: [] as Array<IUser>,
             status: ChecklistItemStatus.NotStarted,
             tableKey: checklist.id.toString()
           } ].concat(listItems)
@@ -93,8 +91,7 @@ export const App = () => {
             className="site-layout-background"
             style={ {
               padding: 0,
-            } }
-          >
+            } }>
             { React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: 'trigger',
               onClick: () => setCollapsed(!collapsed),

@@ -1,4 +1,4 @@
-import { Button, DatePicker, Dropdown, Form, Input, Menu, Space } from "antd"
+import { Button, DatePicker, Dropdown, Form, FormInstance, Input, Menu, Space } from "antd"
 import { useTranslation } from "react-i18next"
 import { ChecklistItemStatus } from "../../../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../../../lib/Helpers"
@@ -7,8 +7,9 @@ import { PeopleCell } from "../PeopleCell"
 
 interface Props {
   children: any,
-  editing: any,
   dataIndex: any,
+  editing: boolean,
+  form: FormInstance
   index: any,
   inputType: any,
   ondatechange: (date: string) => void,
@@ -44,7 +45,9 @@ export const EditableCell = ({
         </td>
       )
     case 'people':
-      return <PeopleCell editing={ editing } record={ record } />
+      return <PeopleCell
+        editing={ editing }
+        record={ record } />
     case 'due':
       return (
         <td { ...restProps }>

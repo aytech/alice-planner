@@ -1,7 +1,11 @@
+import { UserAddOutlined } from "@ant-design/icons"
 import { useReactiveVar } from "@apollo/client"
 import { Avatar, Button, Dropdown, Menu, Tooltip, Typography } from "antd"
-import { peopleData } from "../../../../../../cache"
+import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { peopleData, selectedPeople } from "../../../../../../cache"
 import { IChecklistTableItem, IUser } from "../../../../../../lib/Types"
+import "./styles.css"
 
 interface Props {
   editing: boolean
@@ -14,7 +18,11 @@ export const PeopleCell = ({
   ...restProps
 }: Props) => {
 
+  const { t } = useTranslation()
   const people = useReactiveVar(peopleData)
+  const selected = useReactiveVar(selectedPeople)
+
+  const [ dropdownItems, setDropdownItems ] = useState<IUser[]>([])
 
   const getPersonName = (person: IUser) => {
     if (person.name === undefined && person.surname === undefined) {
@@ -23,70 +31,112 @@ export const PeopleCell = ({
     return `${ person.name } ${ person.surname }`
   }
 
+  const add = (person: IUser) => {
+    setDropdownItems(dropdownItems.filter(item => item.id !== person.id))
+    selectedPeople(selectedPeople().concat(person))
+  }
+
+  const remove = (person: IUser) => {
+    setDropdownItems(dropdownItems.concat(person))
+    selectedPeople(selected.filter(selectedPerson => selectedPerson.id !== person.id))
+  }
+
+  useEffect(() => {
+    selectedPeople(record.people)
+    setDropdownItems(people.filter(person => record.people.find(recordPerson => recordPerson.id === person.id) === undefined))
+  }, [ people, record.people ])
+
+  const PeopleElement = () => {
+    return (
+      <Avatar.Group>
+        { selected.length > 0 ? selected.map((person: IUser) => (
+          <Tooltip
+            key={ person.id }
+            placement="top"
+            title={ getPersonName(person) }>
+            <Avatar className="people-avatar">
+              <Typography.Link
+                className="people-link"
+                onClick={ () => remove(person) }>
+                { person.name?.charAt(0) }
+              </Typography.Link>
+            </Avatar>
+          </Tooltip>
+        )) : (
+          <Tooltip
+            placement="top"
+            title={ t("person-add") }>
+            <Avatar className="people-avatar">
+              <Typography.Link className="people-link">
+                <UserAddOutlined />
+              </Typography.Link>
+            </Avatar>
+          </Tooltip>
+        ) }
+      </Avatar.Group>
+    )
+  }
+
+  const PeopleDropdown = () => {
+    console.log(dropdownItems)
+    return dropdownItems.length > 0 ? (
+      <Dropdown
+        className="people-dropdown"
+        overlay={ (
+          <Menu items={
+            dropdownItems.map(item => {
+              return {
+                key: item.id,
+                label: (
+                  <Tooltip
+                    placement="top"
+                    title={ getPersonName(item) }>
+                    <Avatar
+                      style={ { backgroundColor: '#f56a00' } }>
+                      <Typography.Link
+                        className="people-link"
+                        onClick={ () => add(item) }>
+                        { item.name?.charAt(0) }
+                      </Typography.Link>
+                    </Avatar>
+                  </Tooltip>
+                )
+              }
+            })
+          } />
+        ) }
+        placement="bottom">
+        <Button className="people-trigger">
+          <PeopleElement />
+        </Button>
+      </Dropdown>
+    ) : <PeopleElement />
+  }
+
   return (
-    <td { ...restProps }>
+    <td
+      className="people-cell"
+      { ...restProps }>
       { editing ? (
-        <Dropdown
-          className="people-dropdown"
-          overlay={ (
-            <Menu items={
-              people.map(person => {
-                return {
-                  key: person.id,
-                  label: (
-                    <Tooltip
-                      placement="top"
-                      title={ getPersonName(person) }>
-                      <Avatar
-                        style={ { backgroundColor: '#f56a00' } }>
-                        <Typography.Link
-                          onClick={ () => console.log(`adding ${ person.id } to ${ record.id }`) }>
-                          { person.name?.charAt(0) }
-                        </Typography.Link>
-                      </Avatar>
-                    </Tooltip>
-                  )
-                }
-              })
-            } />
-          ) }
-          placement="bottom">
-          <Button className="people-trigger">
-            <Avatar.Group>
-              { record.people.map((person: IUser) => (
-                <Tooltip
-                  key={ person.id }
-                  placement="top"
-                  title={ getPersonName(person) }>
-                  <Avatar
-                    style={ { backgroundColor: '#f56a00' } }>
-                    <Typography.Link
-                      onClick={ () => {
-                        console.log(`removing ${ person.id } from ${ record.id }`)
-                      } }>
-                      { person.name?.charAt(0) }
-                    </Typography.Link>
-                  </Avatar>
-                </Tooltip>
-              )) }
-            </Avatar.Group>
-          </Button>
-        </Dropdown>
+        <PeopleDropdown />
       ) : (
         <Avatar.Group>
-          { record.people.map((person: IUser) => (
+          { selected.map((person: IUser) => (
             <Tooltip
               key={ person.id }
               placement="top"
               title={ `${ person.name } ${ person.surname }` }>
               <Avatar
-                style={ { backgroundColor: '#f56a00' } }>
+                style={ {
+                  backgroundColor: '#f56a00',
+                  cursor: 'pointer'
+                } }>
                 { person.name?.charAt(0) }
               </Avatar>
             </Tooltip>
           )) }
         </Avatar.Group>
       ) }
-    </td>
+    </td >
   )
 }

@@ -1,0 +1,19 @@
+.ant-typography.people-link {
+  color: #fff;
+}
+
+.ant-typography.people-link:hover,
+.ant-typography.people-link:focus,
+.ant-typography.people-link:active {
+  color: #e6e6e6;
+}
+
+.people-avatar {
+  background-color: gray;
+  color: #fff;
+  cursor: pointer;
+}
+
+.people-cell {
+  text-align: center;
+}
