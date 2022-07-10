@@ -3,7 +3,7 @@ import { useReactiveVar } from "@apollo/client"
 import { Avatar, Button, Dropdown, Menu, Tooltip, Typography } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { peopleData, selectedPeople } from "../../../../../../cache"
+import { peopleData } from "../../../../../../cache"
 import { IChecklistTableItem, IUser } from "../../../../../../lib/Types"
 import "./styles.css"
 
@@ -20,8 +20,8 @@ export const PeopleCell = ({
 
   const { t } = useTranslation()
   const people = useReactiveVar(peopleData)
-  const selected = useReactiveVar(selectedPeople)
 
+  const [ recordItems, setRecordItems ] = useState<IUser[]>([])
   const [ dropdownItems, setDropdownItems ] = useState<IUser[]>([])
 
   const getPersonName = (person: IUser) => {
@@ -33,28 +33,32 @@ export const PeopleCell = ({
 
   const add = (person: IUser) => {
     setDropdownItems(dropdownItems.filter(item => item.id !== person.id))
-    selectedPeople(selectedPeople().concat(person))
+    setRecordItems(recordItems.concat(person))
   }
 
   const remove = (person: IUser) => {
     setDropdownItems(dropdownItems.concat(person))
-    selectedPeople(selected.filter(selectedPerson => selectedPerson.id !== person.id))
+    setRecordItems(recordItems.filter(item => item.id !== person.id))
   }
 
   useEffect(() => {
-    selectedPeople(record.people)
+    setRecordItems(record.people)
     setDropdownItems(people.filter(person => record.people.find(recordPerson => recordPerson.id === person.id) === undefined))
   }, [ people, record.people ])
 
   const PeopleElement = () => {
     return (
       <Avatar.Group>
-        { selected.length > 0 ? selected.map((person: IUser) => (
+        { recordItems.length > 0 ? recordItems.map((person: IUser) => (
           <Tooltip
             key={ person.id }
             placement="top"
             title={ getPersonName(person) }>
-            <Avatar className="people-avatar">
+            <Avatar
+              className="people-avatar"
+              style={ {
+                backgroundColor: '#f56a00'
+              } }>
               <Typography.Link
                 className="people-link"
                 onClick={ () => remove(person) }>
@@ -78,7 +82,6 @@ export const PeopleCell = ({
   }
 
   const PeopleDropdown = () => {
-    console.log(dropdownItems)
     return dropdownItems.length > 0 ? (
       <Dropdown
         className="people-dropdown"
@@ -120,22 +123,7 @@ export const PeopleCell = ({
       { editing ? (
         <PeopleDropdown />
       ) : (
-        <Avatar.Group>
-          { selected.map((person: IUser) => (
-            <Tooltip
-              key={ person.id }
-              placement="top"
-              title={ `${ person.name } ${ person.surname }` }>
-              <Avatar
-                style={ {
-                  backgroundColor: '#f56a00',
-                  cursor: 'pointer'
-                } }>
-                { person.name?.charAt(0) }
-              </Avatar>
-            </Tooltip>
-          )) }
-        </Avatar.Group>
+        <PeopleElement />
       ) }
     </td >
   )
