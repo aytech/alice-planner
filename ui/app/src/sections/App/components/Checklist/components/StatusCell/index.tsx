@@ -1,5 +1,5 @@
 import { Button, Dropdown, Menu } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ChecklistItemStatus } from "../../../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../../../lib/Helpers"
@@ -41,6 +41,10 @@ export const StatusCell = ({
       return undefined
     }).filter(item => item !== undefined) as { key: string, label: JSX.Element }[]
   }
+
+  useEffect(() => {
+    setSelectedStatus(record.status)
+  }, [ record.status ])
 
   return (
     <td { ...restProps }>

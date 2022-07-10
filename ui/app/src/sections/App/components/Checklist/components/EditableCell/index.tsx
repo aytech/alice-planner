@@ -1,6 +1,7 @@
-import { DatePicker, Form, FormInstance, Input, Space } from "antd"
-import { useTranslation } from "react-i18next"
+import { FormInstance } from "antd"
 import { IChecklistTableItem } from "../../../../../../lib/Types"
+import { DescriptionCell } from "../DescriptionCell"
+import { DueCell } from "../DueCell"
 import { PeopleCell } from "../PeopleCell"
 import { StatusCell } from "../StatusCell"
 
@@ -28,35 +29,15 @@ export const EditableCell = ({
   ...restProps
 }: Props) => {
 
-  const { t } = useTranslation()
-
   switch (dataIndex) {
     case "description":
-      return (
-        <td { ...restProps }>
-          { editing ? (
-            <Form.Item
-              className="description"
-              name={ `${ dataIndex }-${ record.tableKey }` }>
-              <Input />
-            </Form.Item>
-          ) : children }
-        </td>
-      )
+      return <DescriptionCell
+        editing={ editing }
+        record={ record } />
     case 'due':
-      return (
-        <td { ...restProps }>
-          { editing ? (
-            <Space direction="vertical">
-              <DatePicker
-                onChange={ (_: any, dateString: string) => {
-                  ondatechange(dateString)
-                } }
-                placeholder={ t("due-date") } />
-            </Space>
-          ) : children }
-        </td>
-      )
+      return <DueCell
+        editing={ editing }
+        record={ record } />
     case 'people':
       return <PeopleCell
         editing={ editing }
