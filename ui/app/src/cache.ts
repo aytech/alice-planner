@@ -5,7 +5,6 @@ export const appSettings = makeVar<ISettings | null>(null)
 export const pageTitle = makeVar<string>("")
 export const peopleData = makeVar<Array<IUser>>([])
 export const profileColor = makeVar<string>("#ccc")
-export const selectedPeople = makeVar<IUser[]>([])
 export const userName = makeVar<string>("")
 
 export const cache = new InMemoryCache({
@@ -26,9 +25,6 @@ export const cache = new InMemoryCache({
         },
         peopleData: {
           read: () => peopleData()
-        },
-        selectedPeople: {
-          read: () => selectedPeople()
         }
       }
     }
