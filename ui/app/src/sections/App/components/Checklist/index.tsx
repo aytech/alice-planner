@@ -1,8 +1,9 @@
-import { Avatar, Button, Form, Table, Tooltip, Typography } from "antd"
+import { Avatar, Button, Form, Table, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
 import { EditableCell } from "./components/EditableCell"
+import { OperationCell } from "./components/OperationCell"
 import "./styles.css"
 
 interface Props {
@@ -24,9 +25,10 @@ export const Checklist = ({
 
   const edit = (record: IChecklistTableItem) => {
     form.setFieldsValue({
-      description: '',
-      due: '',
-      ...record,
+      description: record.description,
+      due: record.due,
+      people: record.people,
+      status: record.status
     });
     setEditingRecordKey(record.id)
   }
@@ -39,8 +41,22 @@ export const Checklist = ({
     setEditingRecordKey('0')
   }
 
-  const save = () => {
-    console.log(`saving: ${ form.getFieldValue('people') }`)
+  const save = (record: IChecklistTableItem) => {
+    console.log(record.people)
+
+    form.validateFields().then(() => {
+      console.log("Saving: ", {
+        description: form.getFieldValue("description"),
+        due: form.getFieldValue("due").format("YYYY-MM-DD"),
+        list: record.list,
+        people: form.getFieldValue("people"),
+        status: form.getFieldValue("status")
+      })
+    })
+  }
+
+  const revalidate = (field: string) => {
+    form.validateFields([ field ])
   }
 
   const columns = [
@@ -86,38 +102,15 @@ export const Checklist = ({
     },
     {
       dataIndex: 'operation',
-      render: (_: any, record: IChecklistTableItem) => {
-        if (record.id === '0' && editingRecordKey === '0') {
-          return (
-            <Typography.Link
-              onClick={ save }>
-              { t("save") }
-            </Typography.Link>
-          )
-        }
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={ () => console.log(`saving ${ form.getFieldValue('description') }`) }
-              style={ {
-                marginRight: 8,
-              } }>
-              { t("save") }
-            </Typography.Link>
-            <Typography.Link
-              onClick={ cancel }>
-              { t("cancel") }
-            </Typography.Link>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={ editingRecordKey !== '0' }
-            onClick={ () => edit(record) }>
-            { t("edit") }
-          </Typography.Link>
-        );
-      },
+      render: (_: any, record: IChecklistTableItem) => (
+        <OperationCell
+          cancel={ cancel }
+          edit={ edit }
+          editingKey={ editingRecordKey }
+          editing={ isEditing(record) }
+          record={ record }
+          save={ save } />
+      ),
       title: 'operation',
       width: '15%'
     }
@@ -128,13 +121,9 @@ export const Checklist = ({
       onCell: (record: IChecklistTableItem) => ({
         dataIndex: column.dataIndex,
         editing: isEditing(record),
-        form,
-        inputType: 'text',
         record,
-        title: column.title,
-        ondatechange: (date: string) => {
-          form.setFieldsValue({ 'due': date })
-        }
+        revalidate,
+        title: column.title
       }),
     }
   })

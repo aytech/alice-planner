@@ -1,3 +1,7 @@
+.ant-form-item.people {
+  margin-bottom: 0;
+}
+
 .ant-typography.people-link {
   color: #fff;
 }

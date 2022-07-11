@@ -1,9 +1,9 @@
 import { Button, Dropdown, Menu } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { ChecklistItemStatus } from "../../../../../../lib/graphql/graphql"
-import { ChecklistHelper } from "../../../../../../lib/Helpers"
-import { IChecklistTableItem } from "../../../../../../lib/Types"
+import { ChecklistItemStatus } from "../../../../../../../../lib/graphql/graphql"
+import { ChecklistHelper } from "../../../../../../../../lib/Helpers"
+import { IChecklistTableItem } from "../../../../../../../../lib/Types"
 
 interface Props {
   editing: boolean

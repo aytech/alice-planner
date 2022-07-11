@@ -1,20 +1,22 @@
 import { UserAddOutlined } from "@ant-design/icons"
 import { useReactiveVar } from "@apollo/client"
-import { Avatar, Button, Dropdown, Menu, Tooltip, Typography } from "antd"
+import { Avatar, Button, Dropdown, Form, Menu, Tooltip, Typography } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { peopleData } from "../../../../../../cache"
-import { IChecklistTableItem, IUser } from "../../../../../../lib/Types"
+import { peopleData } from "../../../../../../../../cache"
+import { IChecklistTableItem, IUser } from "../../../../../../../../lib/Types"
 import "./styles.css"
 
 interface Props {
   editing: boolean
   record: IChecklistTableItem
+  revalidate: () => void
 }
 
 export const PeopleCell = ({
   editing,
   record,
+  revalidate,
   ...restProps
 }: Props) => {
 
@@ -34,6 +36,7 @@ export const PeopleCell = ({
   const add = (person: IUser) => {
     setDropdownItems(dropdownItems.filter(item => item.id !== person.id))
     setRecordItems(recordItems.concat(person))
+    revalidate()
   }
 
   const remove = (person: IUser) => {
@@ -121,10 +124,22 @@ export const PeopleCell = ({
       className="people-cell"
       { ...restProps }>
       { editing ? (
-        <PeopleDropdown />
+        <Form.Item
+          className="people"
+          name="people"
+          rules={ [
+            {
+              validator: () =>
+                recordItems.length > 0 ? Promise.resolve() : Promise.reject(new Error(t("form.errors.people-empty")))
+            }
+          ] }
+          shouldUpdate>
+          <PeopleDropdown />
+        </Form.Item>
       ) : (
         <PeopleElement />
       ) }
+
     </td >
   )
 }

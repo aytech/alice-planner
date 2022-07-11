@@ -1,31 +1,25 @@
-import { FormInstance } from "antd"
+import { useReactiveVar } from "@apollo/client"
 import { IChecklistTableItem } from "../../../../../../lib/Types"
-import { DescriptionCell } from "../DescriptionCell"
-import { DueCell } from "../DueCell"
-import { PeopleCell } from "../PeopleCell"
-import { StatusCell } from "../StatusCell"
+import { DescriptionCell } from "./components/DescriptionCell"
+import { DueCell } from "./components/DueCell"
+import { PeopleCell } from "./components/PeopleCell"
+import { StatusCell } from "./components/StatusCell"
 
 interface Props {
   children: any,
   dataIndex: any,
   editing: boolean,
-  form: FormInstance
-  index: any,
-  inputType: any,
-  ondatechange: (date: string) => void,
   record: IChecklistTableItem,
+  revalidate: (field: string) => void
   title: any
 }
 
 export const EditableCell = ({
   children,
-  editing,
   dataIndex,
-  index,
-  inputType,
-  ondatechange,
+  editing,
   record,
-  title,
+  revalidate,
   ...restProps
 }: Props) => {
 
@@ -41,7 +35,8 @@ export const EditableCell = ({
     case 'people':
       return <PeopleCell
         editing={ editing }
-        record={ record } />
+        record={ record }
+        revalidate={ () => revalidate("people") } />
     case 'status':
       return <StatusCell
         editing={ editing }

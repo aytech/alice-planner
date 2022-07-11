@@ -36,8 +36,6 @@
   background: transparent;
   border-color: transparent;
   box-shadow: none;
-  display: flex;
-  align-items: center;
 }
 
 .ant-btn.people-trigger:active,

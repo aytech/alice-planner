@@ -53,6 +53,7 @@ export const App = () => {
             due: item.due,
             id: item.id,
             key: item.id.toString(),
+            list: checklist.id,
             people: item.people,
             status: item.status,
             tableKey: checklist.id.toString()
@@ -63,6 +64,7 @@ export const App = () => {
           items: [ {
             id: '0',
             key: '0',
+            list: checklist.id,
             people: [] as Array<IUser>,
             status: ChecklistItemStatus.NotStarted,
             tableKey: checklist.id.toString()
@@ -109,7 +111,8 @@ export const App = () => {
                 editingRecordKey={ editingRecordKey }
                 key={ list.id }
                 list={ list }
-                setEditingRecordKey={ setEditingRecordKey } />
+                setEditingRecordKey={ setEditingRecordKey } 
+                />
             )) }
           </Content>
         </Layout>

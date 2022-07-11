@@ -3,10 +3,18 @@
   "description": "Popis",
   "due-date": "Splatnost",
   "edit": "Upravit",
+  "form": {
+    "errors": {
+      "description-empty": "Zadejte text",
+      "due-empty": "Zadejte datum splatnosti",
+      "people-empty": "Zadejte alespoň jednu osobu"
+    }
+  },
   "nav": {
     "active": "Seznam",
     "archived": "Archiv"
   },
+  "person-add": "Přidat osobu",
   "save": "Uložit",
   "statuses": {
     "DONE": "Hotový",

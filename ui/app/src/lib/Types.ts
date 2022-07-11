@@ -31,6 +31,7 @@ export interface IChecklistTableItem {
   due?: string
   id: string
   key: string
+  list: string,
   people: Array<IUser>
   status: ChecklistItemStatus
   tableKey: string
