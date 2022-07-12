@@ -42,14 +42,14 @@ export const Checklist = ({
   }
 
   const save = (record: IChecklistTableItem) => {
-    console.log(record.people)
+    console.log(form.getFieldValue("people"))
 
     form.validateFields().then(() => {
       console.log("Saving: ", {
         description: form.getFieldValue("description"),
-        due: form.getFieldValue("due").format("YYYY-MM-DD"),
+        due: record.due,
         list: record.list,
-        people: form.getFieldValue("people"),
+        people: record.people,
         status: form.getFieldValue("status")
       })
     })
@@ -67,7 +67,7 @@ export const Checklist = ({
     },
     {
       dataIndex: 'due',
-      title: "Due date",
+      title: t("due-date"),
       width: '15%',
     },
     {
@@ -85,7 +85,7 @@ export const Checklist = ({
           </Avatar.Group>
         )
       },
-      title: "People",
+      title: t("people"),
       width: '10%',
     },
     {
@@ -111,7 +111,7 @@ export const Checklist = ({
           record={ record }
           save={ save } />
       ),
-      title: 'operation',
+      title: '',
       width: '15%'
     }
   ]

@@ -62,6 +62,7 @@ export const App = () => {
         list.push({
           ...checklist,
           items: [ {
+            description: "",
             id: '0',
             key: '0',
             list: checklist.id,

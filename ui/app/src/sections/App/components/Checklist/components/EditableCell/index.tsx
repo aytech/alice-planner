@@ -1,4 +1,3 @@
-import { useReactiveVar } from "@apollo/client"
 import { IChecklistTableItem } from "../../../../../../lib/Types"
 import { DescriptionCell } from "./components/DescriptionCell"
 import { DueCell } from "./components/DueCell"
@@ -31,7 +30,8 @@ export const EditableCell = ({
     case 'due':
       return <DueCell
         editing={ editing }
-        record={ record } />
+        record={ record }
+        revalidate={ () => revalidate("due") } />
     case 'people':
       return <PeopleCell
         editing={ editing }

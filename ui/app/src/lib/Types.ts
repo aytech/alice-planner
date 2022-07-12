@@ -27,7 +27,7 @@ export interface IUser {
 }
 
 export interface IChecklistTableItem {
-  description?: string
+  description: string
   due?: string
   id: string
   key: string

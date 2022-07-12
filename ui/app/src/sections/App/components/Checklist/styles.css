@@ -56,3 +56,7 @@
 .ant-form-item.description {
   margin-bottom: 0;
 }
+
+.checklist-table th.ant-table-cell {
+  text-align: center;
+}

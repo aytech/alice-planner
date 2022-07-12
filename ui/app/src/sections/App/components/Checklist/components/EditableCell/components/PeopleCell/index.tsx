@@ -16,8 +16,7 @@ interface Props {
 export const PeopleCell = ({
   editing,
   record,
-  revalidate,
-  ...restProps
+  revalidate
 }: Props) => {
 
   const { t } = useTranslation()
@@ -40,8 +39,10 @@ export const PeopleCell = ({
   }
 
   const remove = (person: IUser) => {
-    setDropdownItems(dropdownItems.concat(person))
-    setRecordItems(recordItems.filter(item => item.id !== person.id))
+    if (editing) {
+      setDropdownItems(dropdownItems.concat(person))
+      setRecordItems(recordItems.filter(item => item.id !== person.id))
+    }
   }
 
   useEffect(() => {
@@ -120,9 +121,7 @@ export const PeopleCell = ({
   }
 
   return (
-    <td
-      className="people-cell"
-      { ...restProps }>
+    <td className="people-cell">
       { editing ? (
         <Form.Item
           className="people"
@@ -139,7 +138,6 @@ export const PeopleCell = ({
       ) : (
         <PeopleElement />
       ) }
-
-    </td >
+    </td>
   )
 }

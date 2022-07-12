@@ -1,3 +1,7 @@
 .ant-form-item.due {
   margin-bottom: 0;
 }
+
+.due-cell {
+  text-align: center;
+}
