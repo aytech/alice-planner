@@ -68,7 +68,7 @@ const errorLink = onError(
           case errorMessages.unauthorized:
             localStorage.removeItem(tokenName)
             localStorage.removeItem(refreshTokenName)
-          // window.location.replace("/login")
+          window.location.replace("/login")
         }
       }
     }

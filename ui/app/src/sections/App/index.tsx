@@ -140,8 +140,6 @@ export const App = () => {
         <Route path={ paths.login } element={ <Login /> } />
         <Route path="*" element={ <NotFound /> } />
       </Routes>
-      {/* 
-       */}
     </Layout>
   )
 }

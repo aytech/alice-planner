@@ -1,28 +1,29 @@
 import { Layout, Skeleton } from "antd"
-import "./index.css"
+import { Content, Header } from "antd/lib/layout/layout"
 
 export const Splash = () => {
   return (
-    <h1>AAAA</h1>
-    // <Layout
-    //   className="splash-layout">
-    //   <Layout.Content>
-    //     <Skeleton
-    //       active
-    //       avatar
-    //       paragraph={ { rows: 3 } }
-    //       className="splash-skeleton" />
-    //     <Skeleton
-    //       active
-    //       avatar
-    //       paragraph={ { rows: 3 } }
-    //       className="splash-skeleton" />
-    //     <Skeleton
-    //       active
-    //       avatar
-    //       paragraph={ { rows: 3 } }
-    //       className="splash-skeleton" />
-    //   </Layout.Content>
-    // </Layout>
+    <Layout className="site-layout">
+      <Header
+        className="site-layout-background"
+        style={ {
+          padding: 0,
+        } }>
+      </Header>
+      <Content className="site-layout-background main-content">
+        <Skeleton
+          active
+          paragraph={ { rows: 3 } }
+          className="splash-skeleton" />
+        <Skeleton
+          active
+          paragraph={ { rows: 3 } }
+          className="splash-skeleton" />
+        <Skeleton
+          active
+          paragraph={ { rows: 3 } }
+          className="splash-skeleton" />
+      </Content>
+    </Layout>
   )
 }
