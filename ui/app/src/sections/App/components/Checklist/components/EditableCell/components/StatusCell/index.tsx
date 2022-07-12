@@ -1,6 +1,8 @@
+import { useReactiveVar } from "@apollo/client"
 import { Button, Dropdown, Menu } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { editedRecord } from "../../../../../../../../cache"
 import { ChecklistItemStatus } from "../../../../../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../../../../../lib/Helpers"
 import { IChecklistTableItem } from "../../../../../../../../lib/Types"
@@ -17,11 +19,13 @@ export const StatusCell = ({
 }: Props) => {
 
   const { t } = useTranslation()
+  const editingRecord = useReactiveVar(editedRecord)
 
   const [ selectedStatus, setSelectedStatus ] = useState<ChecklistItemStatus>(ChecklistItemStatus.NotStarted)
 
   const setStatus = (status: ChecklistItemStatus) => {
     setSelectedStatus(status)
+    editedRecord({ ...editingRecord, status, tableKey: record.tableKey })
   }
 
   const statuses = (): { key: string, label: JSX.Element }[] => {
@@ -42,6 +46,15 @@ export const StatusCell = ({
     }).filter(item => item !== undefined) as { key: string, label: JSX.Element }[]
   }
 
+  const DropdownButton = () => {
+    const source: IChecklistTableItem = editing && (editingRecord.tableKey === record.tableKey) ? editingRecord : record
+    return (
+      <Button className={ ChecklistHelper.statusButtonClassName(source.status) }>
+        { t(`statuses.${ source.status }`) }
+      </Button>
+    )
+  }
+
   useEffect(() => {
     setSelectedStatus(record.status)
   }, [ record.status ])
@@ -59,10 +72,8 @@ export const StatusCell = ({
           </Button>
         </Dropdown>
       ) : (
-        <Button className={ ChecklistHelper.statusButtonClassName(record.status) }>
-          { t(`statuses.${ record.status }`) }
-        </Button>
+        <DropdownButton />
       ) }
-    </td>
+    </td >
   )
 }

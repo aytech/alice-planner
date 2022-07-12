@@ -3,7 +3,7 @@ import { useReactiveVar } from "@apollo/client"
 import { Avatar, Button, Dropdown, Form, Menu, Tooltip, Typography } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { peopleData } from "../../../../../../../../cache"
+import { editedRecord, peopleData } from "../../../../../../../../cache"
 import { IChecklistTableItem, IUser } from "../../../../../../../../lib/Types"
 import "./styles.css"
 
@@ -21,8 +21,8 @@ export const PeopleCell = ({
 
   const { t } = useTranslation()
   const people = useReactiveVar(peopleData)
+  const editingRecord = useReactiveVar(editedRecord)
 
-  const [ recordItems, setRecordItems ] = useState<IUser[]>([])
   const [ dropdownItems, setDropdownItems ] = useState<IUser[]>([])
 
   const getPersonName = (person: IUser) => {
@@ -34,26 +34,33 @@ export const PeopleCell = ({
 
   const add = (person: IUser) => {
     setDropdownItems(dropdownItems.filter(item => item.id !== person.id))
-    setRecordItems(recordItems.concat(person))
+    editedRecord({
+      ...editingRecord,
+      people: editingRecord.people.concat(person),
+      tableKey: record.tableKey
+    })
     revalidate()
   }
 
   const remove = (person: IUser) => {
     if (editing) {
       setDropdownItems(dropdownItems.concat(person))
-      setRecordItems(recordItems.filter(item => item.id !== person.id))
+      editedRecord({
+        ...editingRecord,
+        people: editingRecord.people.filter(item => item.id !== person.id)
+      })
     }
   }
 
   useEffect(() => {
-    setRecordItems(record.people)
-    setDropdownItems(people.filter(person => record.people.find(recordPerson => recordPerson.id === person.id) === undefined))
-  }, [ people, record.people ])
+    setDropdownItems(people.filter(person => editingRecord.people.find(recordPerson => recordPerson.id === person.id) === undefined))
+  }, [ people, editingRecord ])
 
   const PeopleElement = () => {
+    const source: IUser[] = editing === true && (record.tableKey === editingRecord.tableKey) ? editingRecord.people : record.people
     return (
       <Avatar.Group>
-        { recordItems.length > 0 ? recordItems.map((person: IUser) => (
+        { source.length > 0 ? source.map((person: IUser) => (
           <Tooltip
             key={ person.id }
             placement="top"
@@ -129,7 +136,7 @@ export const PeopleCell = ({
           rules={ [
             {
               validator: () =>
-                recordItems.length > 0 ? Promise.resolve() : Promise.reject(new Error(t("form.errors.people-empty")))
+                editingRecord.people.length > 0 ? Promise.resolve() : Promise.reject(new Error(t("form.errors.people-empty")))
             }
           ] }
           shouldUpdate>

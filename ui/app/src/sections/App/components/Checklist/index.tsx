@@ -1,5 +1,6 @@
 import { Avatar, Button, Form, Table, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
+import { editedRecord, emptyRecord } from "../../../../cache"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
 import { EditableCell } from "./components/EditableCell"
@@ -30,6 +31,7 @@ export const Checklist = ({
       people: record.people,
       status: record.status
     });
+    editedRecord(record)
     setEditingRecordKey(record.id)
   }
 
@@ -38,19 +40,18 @@ export const Checklist = ({
       description: '',
       due: ''
     });
-    setEditingRecordKey('0')
+    editedRecord(emptyRecord)
+    setEditingRecordKey("0")
   }
 
   const save = (record: IChecklistTableItem) => {
-    console.log(form.getFieldValue("people"))
-
     form.validateFields().then(() => {
       console.log("Saving: ", {
         description: form.getFieldValue("description"),
         due: record.due,
         list: record.list,
-        people: record.people,
-        status: form.getFieldValue("status")
+        people: editedRecord().people,
+        status: editedRecord().status
       })
     })
   }

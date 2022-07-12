@@ -30,7 +30,7 @@ export const OperationCell = ({
       </Typography.Link>
     )
   }
-  // const editable = isEditing(record);
+
   return editing ? (
     <span>
       <Typography.Link
