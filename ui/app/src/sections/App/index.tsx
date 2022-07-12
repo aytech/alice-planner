@@ -3,11 +3,15 @@ import { useQuery } from "@apollo/client"
 import { Skeleton } from "antd"
 import Layout, { Content, Header } from "antd/lib/layout/layout"
 import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
-import { appSettings, peopleData } from "../../cache"
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
+import { appUser, peopleData, selectedPage } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
 import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
+import { UrlHelper } from "../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
+import { Archive } from "../Archive"
+import { Login } from "../Login"
+import { NotFound } from "../NotFound"
 import { Checklist } from "./components/Checklist"
 import { NavColumn } from "./components/NavColumn"
 import "./styles.css"
@@ -17,6 +21,7 @@ export const App = () => {
   useAppQuery()
 
   const location = useLocation()
+  const navigate = useNavigate()
 
   const [ collapsed, setCollapsed ] = useState(false);
   const [ checklists, setChecklists ] = useState<IChecklistTable[]>([])
@@ -25,18 +30,18 @@ export const App = () => {
   const { loading: settingsLoading } = useQuery<UserQuery>(UserDocument, {
     onCompleted: (value: UserQuery) => {
       if (value?.user === null) {
-        // navigate(`/login?next=${ UrlHelper.getReferrer() }`)
+        navigate(`/login?next=${ UrlHelper.getReferrer() }`)
       } else {
         if (location.pathname === paths.login) {
           // User is logged in, redirect
           const page = sessionStorage.getItem(sessionStorageKeys.page)
           if (page === null) {
-            // navigate("/")
+            navigate(paths.root)
           } else {
-            // navigate(page)
+            navigate(page)
           }
         }
-        appSettings(value.user)
+        appUser(value.user)
       }
     }
   })
@@ -82,42 +87,61 @@ export const App = () => {
     peopleData(userItems)
   }, [ listsData ])
 
+  useEffect(() => {
+    selectedPage("app")
+  }, [ location ])
+
+  const AppContent = ({ children }: { children: any }) => (
+    <>
+      <NavColumn collapsed={ collapsed } />
+      <Layout className="site-layout">
+        <Header
+          className="site-layout-background"
+          style={ {
+            padding: 0,
+          } }>
+          { React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+            className: 'trigger',
+            onClick: () => setCollapsed(!collapsed),
+          }) }
+        </Header>
+        <Content className="site-layout-background main-content">
+          <Skeleton
+            active
+            className="app-skeleton"
+            loading={ settingsLoading || listsLoading }>
+            { children }
+          </Skeleton>
+        </Content>
+      </Layout>
+    </>
+  )
+
   return (
-    <Skeleton
-      active
-      className="app-skeleton"
-      loading={ settingsLoading || listsLoading }>
-      <Layout>
-        <NavColumn collapsed={ collapsed } />
-        <Layout className="site-layout">
-          <Header
-            className="site-layout-background"
-            style={ {
-              padding: 0,
-            } }>
-            { React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-              className: 'trigger',
-              onClick: () => setCollapsed(!collapsed),
-            }) }
-          </Header>
-          <Content
-            className="site-layout-background main-content"
-            style={ {
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            } }>
+    <Layout>
+      <Routes>
+        <Route path={ paths.root } element={ (
+          <AppContent>
             { checklists.map((list: IChecklistTable) => (
               <Checklist
                 editingRecordKey={ editingRecordKey }
                 key={ list.id }
                 list={ list }
-                setEditingRecordKey={ setEditingRecordKey } 
-                />
+                setEditingRecordKey={ setEditingRecordKey }
+              />
             )) }
-          </Content>
-        </Layout>
-      </Layout>
-    </Skeleton>
+          </AppContent>
+        ) } />
+        <Route path={ paths.archive } element={ (
+          <AppContent>
+            <Archive />
+          </AppContent>
+        ) } />
+        <Route path={ paths.login } element={ <Login /> } />
+        <Route path="*" element={ <NotFound /> } />
+      </Routes>
+      {/* 
+       */}
+    </Layout>
   )
 }

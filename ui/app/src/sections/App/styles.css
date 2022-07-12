@@ -15,5 +15,14 @@
 }
 
 .main-content {
+  margin: 24px 16px;
+  min-height: 280px;
   overflow-y: auto;
+  padding: 24px;
 }
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+

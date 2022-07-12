@@ -103,8 +103,8 @@ export type ObtainJsonWebToken = {
   payload: Scalars['GenericScalar'];
   refreshExpiresIn: Scalars['Int'];
   refreshToken: Scalars['String'];
-  settings?: Maybe<User>;
   token: Scalars['String'];
+  user?: Maybe<User>;
 };
 
 export type Query = {
@@ -177,7 +177,7 @@ export type TokenAuthMutationVariables = Exact<{
 }>;
 
 
-export type TokenAuthMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', payload: any, refreshExpiresIn: number, refreshToken: string, token: string, settings?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null } | null };
+export type TokenAuthMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', payload: any, refreshExpiresIn: number, refreshToken: string, token: string, user?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null } | null };
 
 export type AppQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -271,7 +271,7 @@ export const TokenAuthDocument = gql`
     refreshExpiresIn
     refreshToken
     token
-    settings {
+    user {
       id
       avatar
       color

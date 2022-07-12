@@ -3,23 +3,33 @@
   "description": "Popis",
   "due-date": "Splatnost",
   "edit": "Upravit",
+  "errors": {
+    "more-coming": "Ale určitě na něčem pracujeme",
+    "nothing-here": "Tady nic není"
+  },
   "form": {
     "errors": {
       "description-empty": "Zadejte text",
       "due-empty": "Zadejte datum splatnosti",
+      "field-required": "Pole je povinné",
       "people-empty": "Zadejte alespoň jednu osobu"
     }
   },
+  "go-home": "Přejít na úvod",
+  "login": "Přihlásit",
   "nav": {
     "active": "Seznam",
     "archived": "Archiv"
   },
+  "password": "Heslo",
   "people": "Lidé",
   "person-add": "Přidat osobu",
+  "reset": "Reset",
   "save": "Uložit",
   "statuses": {
     "DONE": "Hotový",
     "IN_PROGRESS": "Probíhá",
     "NOT_STARTED": "N/A"
-  }
+  },
+  "username": "Uživatelské jméno"
 }

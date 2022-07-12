@@ -31,12 +31,19 @@ class Color:
 
 
 class ObtainJSONWebToken(JSONWebTokenMutation):
-    settings = Field(User)
+    user = Field(User)
 
     @classmethod
     def resolve(cls, _root, info, **kwargs):
         try:
-            settings = UserModel.objects.get(username=info.context.user, deleted=False)
-            return cls(settings=settings)
+            user = UserModel.objects.get(email=info.context.user.email, deleted=False)
+            return cls(user=user)
         except ObjectDoesNotExist:
-            return cls(settings=User())
+            new_user = UserModel(
+                color=Color.get_color(),
+                email=info.context.user.email,
+                name=info.context.user.first_name,
+                surname=info.context.user.last_name,
+            )
+            new_user.save()
+            return cls(user=new_user)

@@ -1,7 +1,11 @@
 import { CarryOutOutlined, DatabaseOutlined } from "@ant-design/icons"
+import { useReactiveVar } from "@apollo/client"
 import { Menu } from "antd"
 import Sider from "antd/lib/layout/Sider"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
+import { selectedPage } from "../../../../cache"
+import { paths } from "../../../../lib/Constants"
 
 interface Props {
   collapsed: boolean
@@ -12,6 +16,7 @@ export const NavColumn = ({
 }: Props) => {
 
   const { t } = useTranslation()
+  const activePage = useReactiveVar(selectedPage)
 
   return (
     <Sider
@@ -25,16 +30,25 @@ export const NavColumn = ({
         defaultSelectedKeys={ [ '1' ] }
         items={ [
           {
-            key: '1',
+            key: 'app',
             icon: <CarryOutOutlined />,
-            label: collapsed ? '' : t("nav.active"),
+            label: (
+              <Link to={ paths.root }>
+                { collapsed ? '' : t("nav.active") }
+              </Link>
+            )
           },
           {
-            key: '2',
+            key: 'archive',
             icon: <DatabaseOutlined />,
-            label: collapsed ? '' : t("nav.archived"),
+            label: (
+              <Link to={ paths.archive }>
+                { collapsed ? '' : t("nav.archived") }
+              </Link>
+            )
           }
         ] }
+        selectedKeys={ [ activePage ] }
       />
     </Sider>
   )

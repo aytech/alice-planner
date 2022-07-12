@@ -1,6 +1,6 @@
 import { InMemoryCache, makeVar } from "@apollo/client"
 import { ChecklistItemStatus } from "./lib/graphql/graphql"
-import { IChecklistTableItem, ISettings, IUser } from "./lib/Types"
+import { IChecklistTableItem, IUser, MenuItemKey } from "./lib/Types"
 
 export const emptyRecord: IChecklistTableItem = {
   description: "",
@@ -11,19 +11,20 @@ export const emptyRecord: IChecklistTableItem = {
   status: ChecklistItemStatus.NotStarted,
   tableKey: "0"
 }
-export const appSettings = makeVar<ISettings | null>(null)
+export const appUser = makeVar<IUser | null>(null)
 export const editedRecord = makeVar<IChecklistTableItem>(emptyRecord)
 export const pageTitle = makeVar<string>("")
 export const peopleData = makeVar<Array<IUser>>([])
 export const profileColor = makeVar<string>("#ccc")
+export const selectedPage = makeVar<MenuItemKey>("app")
 export const userName = makeVar<string>("")
 
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        appSettings: {
-          read: () => appSettings()
+        appUser: {
+          read: () => appUser()
         },
         editedRecord: {
           read: () => editedRecord()
@@ -39,6 +40,9 @@ export const cache = new InMemoryCache({
         },
         peopleData: {
           read: () => peopleData()
+        },
+        selectedPage: {
+          read: () => selectedPage()
         }
       }
     }

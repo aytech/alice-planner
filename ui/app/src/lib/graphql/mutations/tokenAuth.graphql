@@ -4,7 +4,7 @@ mutation tokenAuth($username: String!, $password: String!) {
     refreshExpiresIn
     refreshToken
     token
-    settings {
+    user {
       id
       avatar
       color

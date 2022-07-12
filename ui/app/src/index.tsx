@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { BrowserRouter as Router } from "react-router-dom"
 import ReactDOM from 'react-dom/client'
 import { App } from './sections/App'
 import { ApolloClient, ApolloError, ApolloLink, ApolloProvider, FetchResult, from, fromPromise, HttpLink } from '@apollo/client'
@@ -11,10 +11,9 @@ import "./index.css"
 import "./i18n"
 import { Splash } from './sections/Splash'
 import { RefreshTokenDocument, RefreshTokenMutation } from './lib/graphql/graphql'
-import { csrfTokenName, errorMessages, paths, refreshTokenName, tokenName } from './lib/Constants'
+import { csrfTokenName, errorMessages, refreshTokenName, tokenName } from './lib/Constants'
 import { IToken } from './lib/Types'
 import { cache } from './cache'
-import { Login } from './sections/Login'
 
 let apolloClient: any
 
@@ -96,11 +95,7 @@ ReactDOM.createRoot(
       <ConfigProvider locale={ csCZ }>
         <Router>
           <React.StrictMode>
-            <Routes>
-              <Route path="/" element={ <App /> } />
-              <Route path={ paths.login } element={ <Login /> } />
-              <Route path="*" element={ <h1>Not found</h1> } />
-            </Routes>
+            <App />
           </React.StrictMode>
         </Router>
       </ConfigProvider>

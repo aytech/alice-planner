@@ -1,9 +1,9 @@
 import { ApolloError, useMutation } from "@apollo/client"
 import { Button, Form, FormProps, Input, Layout, message, Spin } from "antd"
-import { useEffect } from "react"
+import { Content, Header } from "antd/lib/layout/layout"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { pageTitle, appSettings } from "../../cache"
+import { appUser } from "../../cache"
 import { errorMessages, refreshTokenName, tokenName } from "../../lib/Constants"
 import { TokenAuthDocument, TokenAuthMutation, TokenAuthMutationVariables } from "../../lib/graphql/graphql"
 import { UrlHelper } from "../../lib/Helpers"
@@ -42,7 +42,7 @@ export const Login = () => {
   const [ getToken, { loading: loginLoading } ] = useMutation<TokenAuthMutation, TokenAuthMutationVariables>(TokenAuthDocument, {
     onCompleted: (token: TokenAuthMutation) => {
       if (token.tokenAuth !== undefined && token.tokenAuth !== null) {
-        appSettings(token.tokenAuth.settings)
+        appUser(token.tokenAuth.user)
         localStorage.setItem(tokenName, token.tokenAuth.token)
         localStorage.setItem(refreshTokenName, token.tokenAuth.refreshToken)
         // settingsRefetch()
@@ -71,49 +71,53 @@ export const Login = () => {
     })
   }
 
-  useEffect(() => {
-    pageTitle(t("pages.login"))
-  }, [ t ])
-
   return (
-    <Layout.Content>
-      <Spin
-        spinning={ loginLoading }
-        tip={ `${ t("login.in-progress") }...` }>
-        <Form
-          { ...layout }
-          className="login"
-          form={ form }
-          name="login"
-          onFinish={ login }>
-          <Form.Item
-            label={ t("name") }
-            name="username"
-            rules={ [ {
-              required: true,
-              message: t("forms.field-required")
-            } ] }>
-            <Input type="text" placeholder={ t("forms.user-name") } />
-          </Form.Item>
-          <Form.Item
-            label="Heslo"
-            name="password"
-            rules={ [ {
-              required: true,
-              message: t("forms.field-required")
-            } ] }>
-            <Input type="password" placeholder={ t("forms.password") } />
-          </Form.Item>
-          <Form.Item { ...tailLayout }>
-            <Button type="default" htmlType="button" onClick={ () => form.resetFields() }>
-              { t("forms.reset") }
-            </Button>
-            <Button type="primary" htmlType="submit">
-              { t("forms.login") }
-            </Button>
-          </Form.Item>
-        </Form>
-      </Spin>
-    </Layout.Content>
+    <Layout className="site-layout">
+      <Header
+        className="site-layout-background"
+        style={ {
+          padding: 0,
+        } }>
+      </Header>
+      <Content className="site-layout-background main-content">
+        <Spin
+          spinning={ loginLoading }
+          tip={ `${ t("login.in-progress") }...` }>
+          <Form
+            { ...layout }
+            className="login"
+            form={ form }
+            name="login"
+            onFinish={ login }>
+            <Form.Item
+              label={ t("username") }
+              name="username"
+              rules={ [ {
+                required: true,
+                message: t("form.errors.field-required")
+              } ] }>
+              <Input type="text" placeholder={ t("username") } />
+            </Form.Item>
+            <Form.Item
+              label="Heslo"
+              name="password"
+              rules={ [ {
+                required: true,
+                message: t("form.errors.field-required")
+              } ] }>
+              <Input type="password" placeholder={ t("password") } />
+            </Form.Item>
+            <Form.Item { ...tailLayout }>
+              <Button type="default" htmlType="button" onClick={ () => form.resetFields() }>
+                { t("reset") }
+              </Button>
+              <Button type="primary" htmlType="submit">
+                { t("login") }
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
+      </Content>
+    </Layout>
   )
 }

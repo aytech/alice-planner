@@ -2,7 +2,7 @@ import { ChecklistItemStatus } from "./graphql/graphql"
 
 export type AppReferrer = "/"
 
-export interface ISettings {
+export interface IUser {
   id: string,
   avatar?: string | null,
   color?: string | null,
@@ -14,7 +14,7 @@ export interface IToken {
   payload: any,
   refreshExpiresIn: number,
   refreshToken: string,
-  settings?: ISettings,
+  user?: IUser,
   token: string
 }
 
@@ -42,3 +42,5 @@ export interface IChecklistTable {
   items?: Array<IChecklistTableItem>
   name?: string | null
 }
+
+export type MenuItemKey = "app" | "archive"

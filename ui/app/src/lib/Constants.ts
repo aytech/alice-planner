@@ -8,6 +8,7 @@ export const errorMessages = {
   unauthorized: "Unauthorized"
 }
 export const paths = {
+  archive: "/archive",
   login: "/login",
   root: "/"
 }
