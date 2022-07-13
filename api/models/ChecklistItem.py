@@ -12,15 +12,7 @@ class ChecklistItem(Base):
         ('IN_PROGRESS', _('In progress')),
         ('DONE', _('DONE')),
     ]
-    list = models.ForeignKey(
-        Checklist,
-        on_delete=models.DO_NOTHING,
-        related_name='items',
-        related_query_name='items',
-        error_messages={
-            'null': _('Please select checklist')
-        }
-    )
+    archived = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     deleted = models.BooleanField(default=False)
     description = models.CharField(blank=False, null=False, max_length=250, error_messages={
@@ -30,6 +22,15 @@ class ChecklistItem(Base):
         'invalid': _('Please enter valid date'),
         'null': _('Please select due date')
     })
+    list = models.ForeignKey(
+        Checklist,
+        on_delete=models.DO_NOTHING,
+        related_name='items',
+        related_query_name='items',
+        error_messages={
+            'null': _('Please select checklist')
+        }
+    )
     people = models.ManyToManyField(User)
     status = models.CharField(blank=False, null=False, default=STATUSES[0], choices=STATUSES, max_length=100)
 

@@ -5,7 +5,7 @@ from api.models.Base import Base
 
 
 class Checklist(Base):
-    archived = models.DateTimeField(auto_now_add=False, auto_now=False, blank=True, null=True)
+    archived = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     deleted = models.BooleanField(default=False)
     name = models.CharField(blank=True, max_length=150, null=True)

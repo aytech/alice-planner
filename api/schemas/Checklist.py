@@ -16,8 +16,10 @@ class ChecklistQuery(ObjectType):
     @classmethod
     def resolve_checklists(cls, _root, _info):
         try:
-            result = ChecklistModel.objects.all()
-            print(result[0].items.all()[0].people)
-            return ChecklistModel.objects.all()
+            lists = ChecklistModel.objects.all().filter(deleted=False).filter(archived=False)
+            for checklist in lists:
+                checklist.items.set(checklist.items.all().filter(deleted=False).filter(archived=False))
+                print(checklist.items.all().filter(deleted=False).filter(archived=False))
+            return lists
         except ObjectDoesNotExist:
             return None

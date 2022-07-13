@@ -42,8 +42,7 @@ class ObtainJSONWebToken(JSONWebTokenMutation):
             new_user = UserModel(
                 color=Color.get_color(),
                 email=info.context.user.email,
-                name=info.context.user.first_name,
-                surname=info.context.user.last_name,
+                name=info.context.user.username,
             )
             new_user.save()
             return cls(user=new_user)
