@@ -58,9 +58,9 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        'kamenice': {
+        'planner': {
             'handlers': ['file'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
             'propagate': False,
         },
         'django.db.backends': {

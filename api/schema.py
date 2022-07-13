@@ -3,7 +3,7 @@ from graphene import ObjectType, Schema
 
 from api.schemas.Authentication import ObtainJSONWebToken
 from api.schemas.Checklist import ChecklistQuery
-from api.schemas.ChecklistItem import ChecklistItemQuery
+from api.schemas.ChecklistItem import ChecklistItemQuery, CreateChecklistItem
 from api.schemas.User import UserQuery, UpdateUser
 
 
@@ -21,6 +21,8 @@ class Mutation(ObjectType):
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
     revoke_token = graphql_jwt.Revoke.Field()
+
+    create_list = CreateChecklistItem.Field()
 
     update_user = UpdateUser.Field()
 

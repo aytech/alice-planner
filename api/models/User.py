@@ -8,7 +8,7 @@ class User(Base):
     color = models.CharField(blank=True, max_length=50, null=True)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     deleted = models.BooleanField(default=False)
-    email = models.CharField(blank=False, max_length=100, null=False)
+    email = models.CharField(blank=False, max_length=100, null=False, unique=True)
     name = models.CharField(blank=True, max_length=100, null=True)
     surname = models.CharField(blank=True, max_length=100, null=True)
     updated = models.DateTimeField(auto_now=True)
