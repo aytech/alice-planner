@@ -35,13 +35,13 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': APP_DIR / 'logs' / 'planner.log',
             'formatter': 'verbose',

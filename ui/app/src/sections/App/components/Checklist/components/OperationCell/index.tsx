@@ -1,4 +1,5 @@
-import { Typography } from "antd";
+import { CloseCircleOutlined, EditOutlined, SaveOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { Button, Space, Tooltip, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { IChecklistTableItem } from "../../../../../../lib/Types"
 
@@ -24,32 +25,49 @@ export const OperationCell = ({
 
   if (record.id === '0' && editingKey === '0') {
     return (
-      <Typography.Link
-        onClick={ () => save(record) }>
-        { t("save") }
-      </Typography.Link>
+      <Tooltip title={ t("save") } placement="top">
+        <Button
+          icon={ <SaveOutlined /> }
+          onClick={ () => save(record) }
+          size="small" />
+      </Tooltip>
     )
   }
 
   return editing ? (
-    <span>
-      <Typography.Link
-        onClick={ () => save(record) }
-        style={ {
-          marginRight: 8,
-        } }>
-        { t("save") }
-      </Typography.Link>
-      <Typography.Link
-        onClick={ cancel }>
-        { t("cancel") }
-      </Typography.Link>
-    </span>
+    <Space>
+      <Tooltip title={ t("save") } placement="top">
+        <Button
+          icon={ <SaveOutlined /> }
+          onClick={ () => save(record) }
+          size="small"
+          style={ { marginRight: 6 } } />
+      </Tooltip>
+      <Tooltip title={ t("cancel") } placement="top">
+        <Button
+          icon={ <CloseCircleOutlined /> }
+          onClick={ cancel }
+          size="small" />
+      </Tooltip>
+    </Space>
   ) : (
-    <Typography.Link
-      disabled={ editingKey !== '0' }
-      onClick={ () => edit(record) }>
-      { t("edit") }
-    </Typography.Link>
+    <Space>
+      <Tooltip title={ t("edit") } placement="top">
+        <Button
+          disabled={ editingKey !== '0' }
+          icon={ <EditOutlined /> }
+          onClick={ () => edit(record) }
+          size="small"
+          style={ { marginRight: 6 } } />
+      </Tooltip>
+      <Tooltip title={ t("archive") } placement="top">
+        <Button
+          disabled={ editingKey !== '0' }
+          icon={ <SnippetsOutlined /> }
+          onClick={ () => console.log("archiving") }
+          size="small"
+          style={ { marginRight: 8 } } />
+      </Tooltip>
+    </Space>
   );
 }

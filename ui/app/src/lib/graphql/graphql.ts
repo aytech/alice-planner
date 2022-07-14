@@ -36,6 +36,11 @@ export type AppUser = {
   username: Scalars['String'];
 };
 
+export type ArchiveChecklistItem = {
+  __typename?: 'ArchiveChecklistItem';
+  checklistItem?: Maybe<ChecklistItem>;
+};
+
 export type Checklist = {
   __typename?: 'Checklist';
   id: Scalars['ID'];
@@ -53,6 +58,14 @@ export type ChecklistItem = {
   status: ChecklistItemStatus;
 };
 
+export type ChecklistItemInput = {
+  description?: InputMaybe<Scalars['String']>;
+  due?: InputMaybe<Scalars['String']>;
+  list?: InputMaybe<Scalars['String']>;
+  people?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
 /** An enumeration. */
 export enum ChecklistItemStatus {
   /** DONE */
@@ -63,13 +76,51 @@ export enum ChecklistItemStatus {
   NotStarted = 'NOT_STARTED'
 }
 
+export type CreateChecklistItem = {
+  __typename?: 'CreateChecklistItem';
+  checklistItem?: Maybe<ChecklistItem>;
+};
+
+export type DeleteChecklistItem = {
+  __typename?: 'DeleteChecklistItem';
+  checklistItem?: Maybe<ChecklistItem>;
+};
+
+export type ExistingChecklistItemInput = {
+  description?: InputMaybe<Scalars['String']>;
+  due?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  list?: InputMaybe<Scalars['String']>;
+  people?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  archiveList?: Maybe<ArchiveChecklistItem>;
+  createList?: Maybe<CreateChecklistItem>;
+  deleteList?: Maybe<DeleteChecklistItem>;
   refreshToken?: Maybe<Refresh>;
   revokeToken?: Maybe<Revoke>;
   tokenAuth?: Maybe<ObtainJsonWebToken>;
+  updateList?: Maybe<UpdateChecklistItem>;
   updateUser?: Maybe<UpdateUser>;
   verifyToken?: Maybe<Verify>;
+};
+
+
+export type MutationArchiveListArgs = {
+  itemId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type MutationCreateListArgs = {
+  data: ChecklistItemInput;
+};
+
+
+export type MutationDeleteListArgs = {
+  itemId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -86,6 +137,11 @@ export type MutationRevokeTokenArgs = {
 export type MutationTokenAuthArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+
+export type MutationUpdateListArgs = {
+  data: ExistingChecklistItemInput;
 };
 
 
@@ -127,6 +183,11 @@ export type Refresh = {
 export type Revoke = {
   __typename?: 'Revoke';
   revoked: Scalars['Int'];
+};
+
+export type UpdateChecklistItem = {
+  __typename?: 'UpdateChecklistItem';
+  checklistItem?: Maybe<ChecklistItem>;
 };
 
 export type UpdateUser = {

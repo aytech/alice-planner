@@ -1,7 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Prefetch
 from graphene import ObjectType, List
 from graphene_django import DjangoObjectType
 from api.models.Checklist import Checklist as ChecklistModel
+from api.models.ChecklistItem import ChecklistItem as ChecklistItemModel
 
 
 class Checklist(DjangoObjectType):
@@ -16,10 +18,7 @@ class ChecklistQuery(ObjectType):
     @classmethod
     def resolve_checklists(cls, _root, _info):
         try:
-            lists = ChecklistModel.objects.all().filter(deleted=False).filter(archived=False)
-            for checklist in lists:
-                checklist.items.set(checklist.items.all().filter(deleted=False).filter(archived=False))
-                print(checklist.items.all().filter(deleted=False).filter(archived=False))
-            return lists
+            return ChecklistModel.objects.filter(deleted=False).prefetch_related(
+                Prefetch('items', queryset=ChecklistItemModel.objects.filter(deleted=False).filter(archived=False)))
         except ObjectDoesNotExist:
             return None

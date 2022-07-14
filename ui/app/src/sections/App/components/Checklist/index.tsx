@@ -102,7 +102,8 @@ export const Checklist = ({
       width: '10%'
     },
     {
-      dataIndex: 'operation',
+      className: "operation",
+      dataIndex: "operation",
       render: (_: any, record: IChecklistTableItem) => (
         <OperationCell
           cancel={ cancel }
