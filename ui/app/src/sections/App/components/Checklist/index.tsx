@@ -4,6 +4,7 @@ import { editedRecord, emptyRecord } from "../../../../cache"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
 import { EditableCell } from "./components/EditableCell"
+import { Header } from "./components/Header"
 import { OperationCell } from "./components/OperationCell"
 import "./styles.css"
 
@@ -146,7 +147,7 @@ export const Checklist = ({
         columns={ mergedColumns }
         pagination={ false }
         rowClassName="editable-row"
-        title={ () => <h2>{ list.name }</h2> }
+        title={ () => <Header name={ list.name } /> }
       />
     </Form>
   )

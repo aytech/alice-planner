@@ -1,0 +1,27 @@
+.ant-col.header-action-first {
+  text-align: end;
+}
+
+.ant-col.header-action {
+  text-align: end;
+}
+
+.ant-col.header-action-last {
+  text-align: start;
+}
+
+.ant-col.header-actions.ant-col-xs-24 {
+  margin-top: 10px;
+}
+
+.ant-col-xs-24.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 576px) {
+  .ant-col-sm-12.header-title {
+    justify-content: flex-start;
+  }
+}

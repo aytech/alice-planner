@@ -1,6 +1,9 @@
 {
+  "add-list": "Přidat seznam",
   "archive": "Archivovat",
+  "archive-list": "Archivovat seznam",
   "cancel": "Zrušit",
+  "delete-list": "Vymazat seznam",
   "description": "Popis",
   "due-date": "Splatnost",
   "edit": "Upravit",
