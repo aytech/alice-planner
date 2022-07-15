@@ -147,7 +147,7 @@ export const Checklist = ({
         columns={ mergedColumns }
         pagination={ false }
         rowClassName="editable-row"
-        title={ () => <Header name={ list.name } /> }
+        title={ () => <Header list={ list } /> }
       />
     </Form>
   )

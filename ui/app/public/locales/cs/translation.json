@@ -16,6 +16,7 @@
       "description-empty": "Zadejte text",
       "due-empty": "Zadejte datum splatnosti",
       "field-required": "Pole je povinné",
+      "list-empty": "Zadejte název seznamu",
       "people-empty": "Zadejte alespoň jednu osobu"
     }
   },
@@ -25,11 +26,13 @@
     "active": "Seznam",
     "archived": "Archiv"
   },
+  "new-list": "Nový seznam",
   "password": "Heslo",
   "people": "Lidé",
   "person-add": "Přidat osobu",
   "reset": "Reset",
   "save": "Uložit",
+  "send": "Odeslat",
   "statuses": {
     "DONE": "Hotový",
     "IN_PROGRESS": "Probíhá",

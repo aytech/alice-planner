@@ -12,6 +12,7 @@ import { IChecklistTable, IChecklistTableItem, IUser } from "../../lib/Types"
 import { Archive } from "../Archive"
 import { Login } from "../Login"
 import { NotFound } from "../NotFound"
+import { AddChecklist } from "./components/AddChecklist"
 import { Checklist } from "./components/Checklist"
 import { NavColumn } from "./components/NavColumn"
 import "./styles.css"
@@ -122,6 +123,7 @@ export const App = () => {
       <Routes>
         <Route path={ paths.root } element={ (
           <AppContent>
+            <AddChecklist />
             { checklists.map((list: IChecklistTable) => (
               <Checklist
                 editingRecordKey={ editingRecordKey }
