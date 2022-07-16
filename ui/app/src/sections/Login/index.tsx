@@ -52,10 +52,10 @@ export const Login = () => {
     onError: (reason: ApolloError) => {
       switch (reason.message) {
         case errorMessages.invalidCredentials:
-          message.error(t("login.invalid-login"))
+          message.error(t("form.errors.invalid-login"))
           break
         default:
-          message.error(t("generic-error"))
+          message.error(t("form.errors.generic"))
       }
     }
   })
@@ -82,7 +82,7 @@ export const Login = () => {
       <Content className="site-layout-background main-content">
         <Spin
           spinning={ loginLoading }
-          tip={ `${ t("login.in-progress") }...` }>
+          tip={ `${ t("loggin-in") }...` }>
           <Form
             { ...layout }
             className="login"

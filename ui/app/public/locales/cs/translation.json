@@ -16,12 +16,19 @@
       "description-empty": "Zadejte text",
       "due-empty": "Zadejte datum splatnosti",
       "field-required": "Pole je povinné",
+      "generic": "Chyba serveru, kontaktujte správce",
+      "invalid-login": "Zadejte platné přihlašovací údaje",
       "list-empty": "Zadejte název seznamu",
       "people-empty": "Zadejte alespoň jednu osobu"
+    },
+    "messages": {
+      "list-archived": "Archivováno",
+      "list-removed": "Smazáno"
     }
   },
   "go-home": "Přejít na úvod",
   "login": "Přihlásit",
+  "loggin-in": "Přihlášení",
   "nav": {
     "active": "Seznam",
     "archived": "Archiv"
@@ -30,6 +37,7 @@
   "password": "Heslo",
   "people": "Lidé",
   "person-add": "Přidat osobu",
+  "processing": "Zpracovávám",
   "reset": "Reset",
   "save": "Uložit",
   "send": "Odeslat",

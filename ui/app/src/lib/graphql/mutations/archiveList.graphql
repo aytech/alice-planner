@@ -1,0 +1,8 @@
+mutation archiveChecklist($listId: ID) {
+  archiveList(listId: $listId) {
+    checklist {
+      id
+      name
+    }
+  }
+}

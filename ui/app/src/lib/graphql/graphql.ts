@@ -36,6 +36,11 @@ export type AppUser = {
   username: Scalars['String'];
 };
 
+export type ArchiveChecklist = {
+  __typename?: 'ArchiveChecklist';
+  checklist?: Maybe<Checklist>;
+};
+
 export type ArchiveChecklistItem = {
   __typename?: 'ArchiveChecklistItem';
   checklistItem?: Maybe<ChecklistItem>;
@@ -45,7 +50,11 @@ export type Checklist = {
   __typename?: 'Checklist';
   id: Scalars['ID'];
   items: Array<ChecklistItem>;
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type ChecklistInput = {
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type ChecklistItem = {
@@ -76,14 +85,29 @@ export enum ChecklistItemStatus {
   NotStarted = 'NOT_STARTED'
 }
 
+export type CreateChecklist = {
+  __typename?: 'CreateChecklist';
+  checklist?: Maybe<Checklist>;
+};
+
 export type CreateChecklistItem = {
   __typename?: 'CreateChecklistItem';
   checklistItem?: Maybe<ChecklistItem>;
 };
 
+export type DeleteChecklist = {
+  __typename?: 'DeleteChecklist';
+  checklist?: Maybe<Checklist>;
+};
+
 export type DeleteChecklistItem = {
   __typename?: 'DeleteChecklistItem';
   checklistItem?: Maybe<ChecklistItem>;
+};
+
+export type ExistingChecklistInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type ExistingChecklistItemInput = {
@@ -97,29 +121,48 @@ export type ExistingChecklistItemInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  archiveList?: Maybe<ArchiveChecklistItem>;
-  createList?: Maybe<CreateChecklistItem>;
-  deleteList?: Maybe<DeleteChecklistItem>;
+  archiveList?: Maybe<ArchiveChecklist>;
+  archiveListItem?: Maybe<ArchiveChecklistItem>;
+  createList?: Maybe<CreateChecklist>;
+  createListItem?: Maybe<CreateChecklistItem>;
+  deleteList?: Maybe<DeleteChecklist>;
+  deleteListItem?: Maybe<DeleteChecklistItem>;
   refreshToken?: Maybe<Refresh>;
   revokeToken?: Maybe<Revoke>;
   tokenAuth?: Maybe<ObtainJsonWebToken>;
-  updateList?: Maybe<UpdateChecklistItem>;
+  updateList?: Maybe<UpdateChecklist>;
+  updateListItem?: Maybe<UpdateChecklistItem>;
   updateUser?: Maybe<UpdateUser>;
   verifyToken?: Maybe<Verify>;
 };
 
 
 export type MutationArchiveListArgs = {
+  listId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type MutationArchiveListItemArgs = {
   itemId?: InputMaybe<Scalars['ID']>;
 };
 
 
 export type MutationCreateListArgs = {
+  data: ChecklistInput;
+};
+
+
+export type MutationCreateListItemArgs = {
   data: ChecklistItemInput;
 };
 
 
 export type MutationDeleteListArgs = {
+  listId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type MutationDeleteListItemArgs = {
   itemId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -141,6 +184,11 @@ export type MutationTokenAuthArgs = {
 
 
 export type MutationUpdateListArgs = {
+  data: ExistingChecklistInput;
+};
+
+
+export type MutationUpdateListItemArgs = {
   data: ExistingChecklistItemInput;
 };
 
@@ -185,6 +233,11 @@ export type Revoke = {
   revoked: Scalars['Int'];
 };
 
+export type UpdateChecklist = {
+  __typename?: 'UpdateChecklist';
+  checklist?: Maybe<Checklist>;
+};
+
 export type UpdateChecklistItem = {
   __typename?: 'UpdateChecklistItem';
   checklistItem?: Maybe<ChecklistItem>;
@@ -218,6 +271,20 @@ export type Verify = {
   payload: Scalars['GenericScalar'];
 };
 
+export type ArchiveChecklistMutationVariables = Exact<{
+  listId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type ArchiveChecklistMutation = { __typename?: 'Mutation', archiveList?: { __typename?: 'ArchiveChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
+export type DeleteChecklistMutationVariables = Exact<{
+  listId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type DeleteChecklistMutation = { __typename?: 'Mutation', deleteList?: { __typename?: 'DeleteChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
 export type RefreshTokenMutationVariables = Exact<{
   refreshToken: Scalars['String'];
 }>;
@@ -248,7 +315,7 @@ export type AppQuery = { __typename?: 'Query', appUser?: { __typename?: 'AppUser
 export type ChecklistsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ChecklistsQuery = { __typename?: 'Query', checklists?: Array<{ __typename?: 'Checklist', id: string, name?: string | null, items: Array<{ __typename?: 'ChecklistItem', description: string, due: any, id: string, status: ChecklistItemStatus, people: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null }> }> } | null> | null, users?: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null> | null };
+export type ChecklistsQuery = { __typename?: 'Query', checklists?: Array<{ __typename?: 'Checklist', id: string, name: string, items: Array<{ __typename?: 'ChecklistItem', description: string, due: any, id: string, status: ChecklistItemStatus, people: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null }> }> } | null> | null, users?: Array<{ __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null> | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -256,6 +323,78 @@ export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null };
 
 
+export const ArchiveChecklistDocument = gql`
+    mutation archiveChecklist($listId: ID) {
+  archiveList(listId: $listId) {
+    checklist {
+      id
+      name
+    }
+  }
+}
+    `;
+export type ArchiveChecklistMutationFn = Apollo.MutationFunction<ArchiveChecklistMutation, ArchiveChecklistMutationVariables>;
+
+/**
+ * __useArchiveChecklistMutation__
+ *
+ * To run a mutation, you first call `useArchiveChecklistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveChecklistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveChecklistMutation, { data, loading, error }] = useArchiveChecklistMutation({
+ *   variables: {
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useArchiveChecklistMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveChecklistMutation, ArchiveChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ArchiveChecklistMutation, ArchiveChecklistMutationVariables>(ArchiveChecklistDocument, options);
+      }
+export type ArchiveChecklistMutationHookResult = ReturnType<typeof useArchiveChecklistMutation>;
+export type ArchiveChecklistMutationResult = Apollo.MutationResult<ArchiveChecklistMutation>;
+export type ArchiveChecklistMutationOptions = Apollo.BaseMutationOptions<ArchiveChecklistMutation, ArchiveChecklistMutationVariables>;
+export const DeleteChecklistDocument = gql`
+    mutation deleteChecklist($listId: ID) {
+  deleteList(listId: $listId) {
+    checklist {
+      id
+      name
+    }
+  }
+}
+    `;
+export type DeleteChecklistMutationFn = Apollo.MutationFunction<DeleteChecklistMutation, DeleteChecklistMutationVariables>;
+
+/**
+ * __useDeleteChecklistMutation__
+ *
+ * To run a mutation, you first call `useDeleteChecklistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteChecklistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteChecklistMutation, { data, loading, error }] = useDeleteChecklistMutation({
+ *   variables: {
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useDeleteChecklistMutation(baseOptions?: Apollo.MutationHookOptions<DeleteChecklistMutation, DeleteChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteChecklistMutation, DeleteChecklistMutationVariables>(DeleteChecklistDocument, options);
+      }
+export type DeleteChecklistMutationHookResult = ReturnType<typeof useDeleteChecklistMutation>;
+export type DeleteChecklistMutationResult = Apollo.MutationResult<DeleteChecklistMutation>;
+export type DeleteChecklistMutationOptions = Apollo.BaseMutationOptions<DeleteChecklistMutation, DeleteChecklistMutationVariables>;
 export const RefreshTokenDocument = gql`
     mutation refreshToken($refreshToken: String!) {
   refreshToken(refreshToken: $refreshToken) {

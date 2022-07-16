@@ -46,7 +46,7 @@ export const App = () => {
       }
     }
   })
-  const { loading: listsLoading, data: listsData } = useQuery<ChecklistsQuery>(ChecklistsDocument)
+  const { loading: listsLoading, data: listsData, refetch } = useQuery<ChecklistsQuery>(ChecklistsDocument)
 
   useEffect(() => {
     const list: IChecklistTable[] = []
@@ -129,6 +129,7 @@ export const App = () => {
                 editingRecordKey={ editingRecordKey }
                 key={ list.id }
                 list={ list }
+                refetch={ refetch }
                 setEditingRecordKey={ setEditingRecordKey }
               />
             )) }

@@ -23,7 +23,7 @@ class ChecklistQuery(ObjectType):
     @classmethod
     def resolve_checklists(cls, _root, _info):
         try:
-            return ChecklistModel.objects.filter(deleted=False).prefetch_related(
+            return ChecklistModel.objects.filter(deleted=False).filter(archived=False).prefetch_related(
                 Prefetch('items', queryset=ChecklistItemModel.objects.filter(deleted=False).filter(archived=False)))
         except ObjectDoesNotExist:
             return None
@@ -122,3 +122,41 @@ class ArchiveChecklist(Mutation):
             return ArchiveChecklist(checklist=list_model)
         except ObjectDoesNotExist:
             return ArchiveChecklist(checklist=None)
+
+
+class RestoreArchivedChecklist(Mutation):
+    class Arguments:
+        list_id = ID()
+
+    checklist = Field(Checklist)
+
+    @classmethod
+    @user_passes_test(lambda user: user.has_perm('api.add_checklist'), exc=PermissionDenied)
+    def mutate(cls, _root, _info, list_id):
+        try:
+            list_model = ChecklistModel.objects.get(pk=list_id, deleted=False)
+            if list_model:
+                list_model.archived = False
+                list_model.save()
+            return RestoreArchivedChecklist(checklist=list_model)
+        except ObjectDoesNotExist:
+            return RestoreArchivedChecklist(checklist=None)
+
+
+class RestoreDeletedChecklist(Mutation):
+    class Arguments:
+        list_id = ID()
+
+    checklist = Field(Checklist)
+
+    @classmethod
+    @user_passes_test(lambda user: user.has_perm('api.add_checklist'), exc=PermissionDenied)
+    def mutate(cls, _root, _info, list_id):
+        try:
+            list_model = ChecklistModel.objects.get(pk=list_id, deleted=False)
+            if list_model:
+                list_model.deleted = False
+                list_model.save()
+            return RestoreDeletedChecklist(checklist=list_model)
+        except ObjectDoesNotExist:
+            return RestoreDeletedChecklist(checklist=None)

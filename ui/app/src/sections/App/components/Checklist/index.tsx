@@ -11,12 +11,14 @@ import "./styles.css"
 interface Props {
   editingRecordKey: string
   list: IChecklistTable
+  refetch: () => void
   setEditingRecordKey: (key: string) => void
 }
 
 export const Checklist = ({
   editingRecordKey,
   list,
+  refetch,
   setEditingRecordKey
 }: Props) => {
 
@@ -147,7 +149,11 @@ export const Checklist = ({
         columns={ mergedColumns }
         pagination={ false }
         rowClassName="editable-row"
-        title={ () => <Header list={ list } /> }
+        title={ () => (
+          <Header
+            list={ list }
+            refetch={ refetch } />
+        ) }
       />
     </Form>
   )
