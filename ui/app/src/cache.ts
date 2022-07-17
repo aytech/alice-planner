@@ -13,6 +13,7 @@ export const emptyRecord: IChecklistTableItem = {
 }
 export const appUser = makeVar<IUser | null>(null)
 export const editedRecord = makeVar<IChecklistTableItem>(emptyRecord)
+export const editingRecordKey = makeVar<string>('0')
 export const pageTitle = makeVar<string>("")
 export const peopleData = makeVar<Array<IUser>>([])
 export const profileColor = makeVar<string>("#ccc")
@@ -28,6 +29,9 @@ export const cache = new InMemoryCache({
         },
         editedRecord: {
           read: () => editedRecord()
+        },
+        editingRecordKey: {
+          read: () => editingRecordKey()
         },
         color: {
           read: () => profileColor()

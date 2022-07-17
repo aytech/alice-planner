@@ -3,24 +3,23 @@ import { useReactiveVar } from "@apollo/client"
 import { Avatar, Button, Dropdown, Form, Menu, Tooltip, Typography } from "antd"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { editedRecord, peopleData } from "../../../../../../../../cache"
+import { editedRecord, editingRecordKey, peopleData } from "../../../../../../../../cache"
 import { IChecklistTableItem, IUser } from "../../../../../../../../lib/Types"
 import "./styles.css"
 
 interface Props {
-  editing: boolean
   record: IChecklistTableItem
   revalidate: () => void
 }
 
 export const PeopleCell = ({
-  editing,
   record,
   revalidate
 }: Props) => {
 
   const { t } = useTranslation()
   const people = useReactiveVar(peopleData)
+  const editingKey = useReactiveVar(editingRecordKey)
   const editingRecord = useReactiveVar(editedRecord)
 
   const [ dropdownItems, setDropdownItems ] = useState<IUser[]>([])
@@ -43,7 +42,7 @@ export const PeopleCell = ({
   }
 
   const remove = (person: IUser) => {
-    if (editing) {
+    if (record.id === editingKey) {
       setDropdownItems(dropdownItems.concat(person))
       editedRecord({
         ...editingRecord,
@@ -57,7 +56,7 @@ export const PeopleCell = ({
   }, [ people, editingRecord ])
 
   const PeopleElement = () => {
-    const source: IUser[] = editing === true && (record.tableKey === editingRecord.tableKey) ? editingRecord.people : record.people
+    const source: IUser[] = record.id === editingKey && (record.tableKey === editingRecord.tableKey) ? editingRecord.people : record.people
     return (
       <Avatar.Group>
         { source.length > 0 ? source.map((person: IUser) => (
@@ -129,7 +128,7 @@ export const PeopleCell = ({
 
   return (
     <td className="people-cell">
-      { editing ? (
+      { record.id === editingKey ? (
         <Form.Item
           className="people"
           name="people"

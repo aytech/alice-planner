@@ -1,7 +1,7 @@
 import { ApolloError, useMutation } from "@apollo/client"
 import { Avatar, Button, Form, message, Spin, Table, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
-import { editedRecord, emptyRecord } from "../../../../cache"
+import { editedRecord, editingRecordKey, emptyRecord } from "../../../../cache"
 import { CreateChecklistItemDocument, CreateChecklistItemMutation, CreateChecklistItemMutationVariables, UpdateChecklistItemDocument, UpdateChecklistItemMutation, UpdateChecklistItemMutationVariables } from "../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
@@ -11,17 +11,13 @@ import { OperationCell } from "./components/OperationCell"
 import "./styles.css"
 
 interface Props {
-  editingRecordKey: string
   list: IChecklistTable
   refetch: () => void
-  setEditingRecordKey: (key: string) => void
 }
 
 export const Checklist = ({
-  editingRecordKey,
   list,
-  refetch,
-  setEditingRecordKey
+  refetch
 }: Props) => {
 
   const { t } = useTranslation()
@@ -42,12 +38,11 @@ export const Checklist = ({
     onCompleted: (_: UpdateChecklistItemMutation) => {
       message.success(`${ t("form.messages.list-item-updated") }!`)
       editedRecord(emptyRecord)
+      editingRecordKey('0')
       refetch()
     },
     onError: (error: ApolloError) => message.error(error.message)
   })
-
-  const isEditing = (record: IChecklistTableItem) => record.id === editingRecordKey;
 
   const edit = (record: IChecklistTableItem) => {
     form.setFieldsValue({
@@ -57,7 +52,7 @@ export const Checklist = ({
       status: record.status
     })
     editedRecord(record)
-    setEditingRecordKey(record.id)
+    editingRecordKey(record.id)
   }
 
   const cancel = () => {
@@ -66,7 +61,7 @@ export const Checklist = ({
       due: ''
     });
     editedRecord(emptyRecord)
-    setEditingRecordKey("0")
+    editingRecordKey('0')
   }
 
   const save = (record: IChecklistTableItem) => {
@@ -138,8 +133,6 @@ export const Checklist = ({
         <OperationCell
           cancel={ cancel }
           edit={ edit }
-          editingKey={ editingRecordKey }
-          editing={ isEditing(record) }
           record={ record }
           save={ save } />
       ),
@@ -152,7 +145,6 @@ export const Checklist = ({
       ...column,
       onCell: (record: IChecklistTableItem) => ({
         dataIndex: column.dataIndex,
-        editing: isEditing(record),
         record,
         revalidate,
         title: column.title

@@ -1,13 +1,13 @@
 import { CloseCircleOutlined, EditOutlined, SaveOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { useReactiveVar } from "@apollo/client";
 import { Button, Space, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
+import { editingRecordKey } from "../../../../../../cache";
 import { IChecklistTableItem } from "../../../../../../lib/Types"
 
 interface Props {
   cancel: () => void
   edit: (record: IChecklistTableItem) => void
-  editingKey: string,
-  editing: boolean
   record: IChecklistTableItem
   save: (record: IChecklistTableItem) => void
 }
@@ -15,13 +15,12 @@ interface Props {
 export const OperationCell = ({
   cancel,
   edit,
-  editingKey,
-  editing,
   record,
   save
 }: Props) => {
 
   const { t } = useTranslation()
+  const editingKey = useReactiveVar(editingRecordKey)
 
   if (record.id === '0' && editingKey === '0') {
     return (
@@ -98,5 +97,5 @@ export const OperationCell = ({
     )
   }
 
-  return editing ? <EditingActions /> : <ReadingActions />
+  return record.id === editingKey ? <EditingActions /> : <ReadingActions />
 }

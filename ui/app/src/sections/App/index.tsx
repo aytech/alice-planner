@@ -26,7 +26,6 @@ export const App = () => {
 
   const [ collapsed, setCollapsed ] = useState(false);
   const [ checklists, setChecklists ] = useState<IChecklistTable[]>([])
-  const [ editingRecordKey, setEditingRecordKey ] = useState('0');
 
   const { loading: settingsLoading } = useQuery<UserQuery>(UserDocument, {
     onCompleted: (value: UserQuery) => {
@@ -126,12 +125,9 @@ export const App = () => {
             <AddChecklist />
             { checklists.map((list: IChecklistTable) => (
               <Checklist
-                editingRecordKey={ editingRecordKey }
                 key={ list.id }
                 list={ list }
-                refetch={ refetch }
-                setEditingRecordKey={ setEditingRecordKey }
-              />
+                refetch={ refetch } />
             )) }
           </AppContent>
         ) } />

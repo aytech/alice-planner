@@ -1,23 +1,23 @@
+import { useReactiveVar } from "@apollo/client"
 import { Form, Input } from "antd"
 import { useTranslation } from "react-i18next"
+import { editingRecordKey } from "../../../../../../../../cache"
 import { IChecklistTableItem } from "../../../../../../../../lib/Types"
 
 interface Props {
-  editing: boolean,
   record: IChecklistTableItem
 }
 
 export const DescriptionCell = ({
-  editing,
-  record,
-  ...restProps
+  record
 }: Props) => {
 
   const { t } = useTranslation()
+  const editingKey = useReactiveVar(editingRecordKey)
 
   return (
-    <td { ...restProps }>
-      { editing ? (
+    <td>
+      { record.id === editingKey ? (
         <Form.Item
           className="description"
           initialValue={ record.description }

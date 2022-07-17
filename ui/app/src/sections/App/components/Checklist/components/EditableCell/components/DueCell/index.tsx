@@ -3,22 +3,24 @@ import { IChecklistTableItem } from "../../../../../../../../lib/Types"
 import { useTranslation } from "react-i18next"
 import "./styles.css"
 import moment, { Moment } from "moment"
+import { useReactiveVar } from "@apollo/client"
+import { editingRecordKey } from "../../../../../../../../cache"
 
 interface Props {
-  editing: boolean
   record: IChecklistTableItem
   revalidate: () => void
 }
 
 export const DueCell = ({
-  editing,
   record,
   revalidate
 }: Props) => {
 
   const systemFormat = "YYYY-MM-DD"
   const userFormat = "MMMM Do YYYY"
+
   const { t } = useTranslation()
+  const editingKey = useReactiveVar(editingRecordKey)
 
   const Picker = () => (
     <DatePicker
@@ -33,7 +35,7 @@ export const DueCell = ({
 
   return (
     <td className="due-cell">
-      { editing ? (
+      { record.id === editingKey ? (
         <Form.Item
           className="due"
           name="due"
