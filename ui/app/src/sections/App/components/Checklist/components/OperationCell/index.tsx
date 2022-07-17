@@ -6,6 +6,7 @@ import { editingRecordKey } from "../../../../../../cache";
 import { IChecklistTableItem } from "../../../../../../lib/Types"
 
 interface Props {
+  archive: (record: IChecklistTableItem) => void
   cancel: () => void
   edit: (record: IChecklistTableItem) => void
   record: IChecklistTableItem
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const OperationCell = ({
+  archive,
   cancel,
   edit,
   record,
@@ -89,7 +91,7 @@ export const OperationCell = ({
           <Button
             disabled={ editingKey !== '0' }
             icon={ <SnippetsOutlined /> }
-            onClick={ () => console.log("archiving") }
+            onClick={ () => archive(record) }
             size="small"
             style={ { marginRight: 8 } } />
         </Tooltip>

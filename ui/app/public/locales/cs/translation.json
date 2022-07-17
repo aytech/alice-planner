@@ -24,6 +24,7 @@
     "messages": {
       "list-archived": "Archivováno",
       "list-item-added": "Přidáno",
+      "list-item-archived": "Archivováno",
       "list-item-updated": "Aktualizováno",
       "list-removed": "Smazáno"
     }

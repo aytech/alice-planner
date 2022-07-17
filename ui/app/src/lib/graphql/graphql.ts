@@ -278,6 +278,13 @@ export type ArchiveChecklistMutationVariables = Exact<{
 
 export type ArchiveChecklistMutation = { __typename?: 'Mutation', archiveList?: { __typename?: 'ArchiveChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
 
+export type ArchiveChecklistItemMutationVariables = Exact<{
+  itemId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type ArchiveChecklistItemMutation = { __typename?: 'Mutation', archiveListItem?: { __typename?: 'ArchiveChecklistItem', checklistItem?: { __typename?: 'ChecklistItem', id: string, description: string } | null } | null };
+
 export type CreateChecklistItemMutationVariables = Exact<{
   data: ChecklistItemInput;
 }>;
@@ -373,6 +380,42 @@ export function useArchiveChecklistMutation(baseOptions?: Apollo.MutationHookOpt
 export type ArchiveChecklistMutationHookResult = ReturnType<typeof useArchiveChecklistMutation>;
 export type ArchiveChecklistMutationResult = Apollo.MutationResult<ArchiveChecklistMutation>;
 export type ArchiveChecklistMutationOptions = Apollo.BaseMutationOptions<ArchiveChecklistMutation, ArchiveChecklistMutationVariables>;
+export const ArchiveChecklistItemDocument = gql`
+    mutation archiveChecklistItem($itemId: ID) {
+  archiveListItem(itemId: $itemId) {
+    checklistItem {
+      id
+      description
+    }
+  }
+}
+    `;
+export type ArchiveChecklistItemMutationFn = Apollo.MutationFunction<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>;
+
+/**
+ * __useArchiveChecklistItemMutation__
+ *
+ * To run a mutation, you first call `useArchiveChecklistItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveChecklistItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveChecklistItemMutation, { data, loading, error }] = useArchiveChecklistItemMutation({
+ *   variables: {
+ *      itemId: // value for 'itemId'
+ *   },
+ * });
+ */
+export function useArchiveChecklistItemMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>(ArchiveChecklistItemDocument, options);
+      }
+export type ArchiveChecklistItemMutationHookResult = ReturnType<typeof useArchiveChecklistItemMutation>;
+export type ArchiveChecklistItemMutationResult = Apollo.MutationResult<ArchiveChecklistItemMutation>;
+export type ArchiveChecklistItemMutationOptions = Apollo.BaseMutationOptions<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>;
 export const CreateChecklistItemDocument = gql`
     mutation createChecklistItem($data: ChecklistItemInput!) {
   createListItem(data: $data) {

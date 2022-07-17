@@ -2,7 +2,7 @@ import { ApolloError, useMutation } from "@apollo/client"
 import { Avatar, Button, Form, message, Spin, Table, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
 import { editedRecord, editingRecordKey, emptyRecord } from "../../../../cache"
-import { CreateChecklistItemDocument, CreateChecklistItemMutation, CreateChecklistItemMutationVariables, UpdateChecklistItemDocument, UpdateChecklistItemMutation, UpdateChecklistItemMutationVariables } from "../../../../lib/graphql/graphql"
+import { ArchiveChecklistItemDocument, ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables, CreateChecklistItemDocument, CreateChecklistItemMutation, CreateChecklistItemMutationVariables, UpdateChecklistItemDocument, UpdateChecklistItemMutation, UpdateChecklistItemMutationVariables } from "../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
 import { EditableCell } from "./components/EditableCell"
@@ -44,6 +44,14 @@ export const Checklist = ({
     onError: (error: ApolloError) => message.error(error.message)
   })
 
+  const [ archiveItem, { loading: archiveLoading } ] = useMutation<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>(ArchiveChecklistItemDocument, {
+    onCompleted: (_: ArchiveChecklistItemMutation) => {
+      message.success(t("form.messages.list-item-archived"))
+      refetch()
+    },
+    onError: (error: ApolloError) => message.error(error.message)
+  })
+
   const edit = (record: IChecklistTableItem) => {
     form.setFieldsValue({
       description: record.description,
@@ -79,6 +87,10 @@ export const Checklist = ({
         updateItem({ variables: { data: { ...data, id: record.id } } })
       }
     })
+  }
+
+  const archive = (record: IChecklistTableItem) => {
+    archiveItem({ variables: { itemId: record.id } })
   }
 
   const revalidate = (field: string) => {
@@ -131,6 +143,7 @@ export const Checklist = ({
       dataIndex: "operation",
       render: (_: any, record: IChecklistTableItem) => (
         <OperationCell
+          archive={ archive }
           cancel={ cancel }
           edit={ edit }
           record={ record }
@@ -157,7 +170,10 @@ export const Checklist = ({
       component={ false }
       form={ form }>
       <Spin
-        spinning={ saveLoading || updateLoading }
+        spinning={
+          archiveLoading
+          || saveLoading
+          || updateLoading }
         tip={ t("processing") }>
         <Table
           bordered
