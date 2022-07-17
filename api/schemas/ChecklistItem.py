@@ -31,7 +31,7 @@ class ChecklistItemQuery(ObjectType):
 
 
 class ChecklistItemInput(InputObjectType):
-    list = String()
+    list = ID()
     description = String()
     due = String()
     people = List(String)

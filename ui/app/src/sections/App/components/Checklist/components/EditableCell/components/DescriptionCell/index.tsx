@@ -20,6 +20,7 @@ export const DescriptionCell = ({
       { editing ? (
         <Form.Item
           className="description"
+          initialValue={ record.description }
           name="description"
           rules={ [
             {
@@ -30,9 +31,7 @@ export const DescriptionCell = ({
               }
             }
           ] }>
-          <Input
-            placeholder={ t("description") }
-            value={ record.description } />
+          <Input placeholder={ t("description") } type="text" />
         </Form.Item>
       ) : (
         <span>

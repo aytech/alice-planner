@@ -1,0 +1,19 @@
+mutation createChecklistItem($data: ChecklistItemInput!) {
+  createListItem(data: $data) {
+    checklistItem {
+      id
+      description
+      due
+      list {
+        id
+      }
+      people {
+        id
+        color
+        name
+        surname
+      }
+      status
+    }
+  }
+}

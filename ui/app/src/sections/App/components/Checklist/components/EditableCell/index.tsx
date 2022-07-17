@@ -18,10 +18,8 @@ export const EditableCell = ({
   dataIndex,
   editing,
   record,
-  revalidate,
-  ...restProps
+  revalidate
 }: Props) => {
-
   switch (dataIndex) {
     case "description":
       return <DescriptionCell
@@ -43,7 +41,7 @@ export const EditableCell = ({
         record={ record } />
     default:
       return (
-        <td { ...restProps }>
+        <td>
           { children }
         </td>
       )

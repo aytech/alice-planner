@@ -1,6 +1,8 @@
-import { Avatar, Button, Form, Table, Tooltip } from "antd"
+import { ApolloError, useMutation } from "@apollo/client"
+import { Avatar, Button, Form, message, Spin, Table, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
 import { editedRecord, emptyRecord } from "../../../../cache"
+import { CreateChecklistItemDocument, CreateChecklistItemMutation, CreateChecklistItemMutationVariables, UpdateChecklistItemDocument, UpdateChecklistItemMutation, UpdateChecklistItemMutationVariables } from "../../../../lib/graphql/graphql"
 import { ChecklistHelper } from "../../../../lib/Helpers"
 import { IChecklistTable, IChecklistTableItem } from "../../../../lib/Types"
 import { EditableCell } from "./components/EditableCell"
@@ -25,6 +27,26 @@ export const Checklist = ({
   const { t } = useTranslation()
   const [ form ] = Form.useForm()
 
+  const [ saveItem, { loading: saveLoading } ] = useMutation<CreateChecklistItemMutation, CreateChecklistItemMutationVariables>(CreateChecklistItemDocument, {
+    onCompleted: (_: CreateChecklistItemMutation) => {
+      message.success(`${ t("form.messages.list-item-added") }!`)
+      editedRecord(emptyRecord)
+      refetch()
+    },
+    onError: (error: ApolloError) => {
+      message.error(error.message)
+    }
+  })
+
+  const [ updateItem, { loading: updateLoading } ] = useMutation<UpdateChecklistItemMutation, UpdateChecklistItemMutationVariables>(UpdateChecklistItemDocument, {
+    onCompleted: (_: UpdateChecklistItemMutation) => {
+      message.success(`${ t("form.messages.list-item-updated") }!`)
+      editedRecord(emptyRecord)
+      refetch()
+    },
+    onError: (error: ApolloError) => message.error(error.message)
+  })
+
   const isEditing = (record: IChecklistTableItem) => record.id === editingRecordKey;
 
   const edit = (record: IChecklistTableItem) => {
@@ -33,7 +55,7 @@ export const Checklist = ({
       due: record.due,
       people: record.people,
       status: record.status
-    });
+    })
     editedRecord(record)
     setEditingRecordKey(record.id)
   }
@@ -49,13 +71,18 @@ export const Checklist = ({
 
   const save = (record: IChecklistTableItem) => {
     form.validateFields().then(() => {
-      console.log("Saving: ", {
+      const data: any = {
         description: form.getFieldValue("description"),
         due: record.due,
         list: record.list,
-        people: editedRecord().people,
+        people: editedRecord().people.map(person => person.id),
         status: editedRecord().status
-      })
+      }
+      if (record.id === '0') {
+        saveItem({ variables: { data } })
+      } else {
+        updateItem({ variables: { data: { ...data, id: record.id } } })
+      }
     })
   }
 
@@ -137,24 +164,28 @@ export const Checklist = ({
     <Form
       component={ false }
       form={ form }>
-      <Table
-        bordered
-        className="checklist-table"
-        components={ {
-          body: {
-            cell: EditableCell,
-          },
-        } }
-        dataSource={ list.items }
-        columns={ mergedColumns }
-        pagination={ false }
-        rowClassName="editable-row"
-        title={ () => (
-          <Header
-            list={ list }
-            refetch={ refetch } />
-        ) }
-      />
+      <Spin
+        spinning={ saveLoading || updateLoading }
+        tip={ t("processing") }>
+        <Table
+          bordered
+          className="checklist-table"
+          components={ {
+            body: {
+              cell: EditableCell,
+            },
+          } }
+          dataSource={ list.items }
+          columns={ mergedColumns }
+          pagination={ false }
+          rowClassName="editable-row"
+          title={ () => (
+            <Header
+              list={ list }
+              refetch={ refetch } />
+          ) }
+        />
+      </Spin>
     </Form>
   )
 }

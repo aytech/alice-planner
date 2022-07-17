@@ -23,6 +23,8 @@
     },
     "messages": {
       "list-archived": "Archivováno",
+      "list-item-added": "Přidáno",
+      "list-item-updated": "Aktualizováno",
       "list-removed": "Smazáno"
     }
   },

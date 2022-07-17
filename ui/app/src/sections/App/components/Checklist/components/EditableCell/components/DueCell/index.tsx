@@ -40,7 +40,9 @@ export const DueCell = ({
           rules={ [
             {
               validator: () =>
-                record.due === undefined ? Promise.reject(new Error(t("form.errors.due-empty"))) : Promise.resolve()
+                record.due === undefined ?
+                  Promise.reject(new Error(t("form.errors.due-empty")))
+                  : Promise.resolve()
             }
           ] }>
           <Picker />
