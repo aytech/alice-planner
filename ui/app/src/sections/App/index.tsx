@@ -122,7 +122,7 @@ export const App = () => {
       <Routes>
         <Route path={ paths.root } element={ (
           <AppContent>
-            <AddChecklist />
+            <AddChecklist refetch={ refetch } />
             { checklists.map((list: IChecklistTable) => (
               <Checklist
                 key={ list.id }

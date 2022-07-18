@@ -1,10 +1,10 @@
 from .base import *
 from datetime import timedelta
 
-APP_URL = 'http://kamenice.pythonanywhere.com'
+APP_URL = 'http://ayt.pythonanywhere.com'
 
 ALLOWED_HOSTS = [
-    'kamenice.pythonanywhere.com',
+    'ayt.pythonanywhere.com',
 ]
 
 GRAPHIQL_AVAILABLE = False
@@ -35,7 +35,7 @@ LOGGING = {
         }
     },
     'loggers': {
-        'kamenice': {
+        'planner': {
             'handlers': ['file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': False,

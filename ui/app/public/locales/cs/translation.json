@@ -22,6 +22,7 @@
       "people-empty": "Zadejte alespoň jednu osobu"
     },
     "messages": {
+      "list-added": "Přidáno",
       "list-archived": "Archivováno",
       "list-item-added": "Přidáno",
       "list-item-archived": "Archivováno",

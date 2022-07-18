@@ -1,0 +1,8 @@
+mutation createChecklist($data: ChecklistInput!) {
+  createList(data: $data) {
+    checklist {
+      id
+      name
+    }
+  }
+}

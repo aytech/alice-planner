@@ -285,6 +285,13 @@ export type ArchiveChecklistItemMutationVariables = Exact<{
 
 export type ArchiveChecklistItemMutation = { __typename?: 'Mutation', archiveListItem?: { __typename?: 'ArchiveChecklistItem', checklistItem?: { __typename?: 'ChecklistItem', id: string, description: string } | null } | null };
 
+export type CreateChecklistMutationVariables = Exact<{
+  data: ChecklistInput;
+}>;
+
+
+export type CreateChecklistMutation = { __typename?: 'Mutation', createList?: { __typename?: 'CreateChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
 export type CreateChecklistItemMutationVariables = Exact<{
   data: ChecklistItemInput;
 }>;
@@ -416,6 +423,42 @@ export function useArchiveChecklistItemMutation(baseOptions?: Apollo.MutationHoo
 export type ArchiveChecklistItemMutationHookResult = ReturnType<typeof useArchiveChecklistItemMutation>;
 export type ArchiveChecklistItemMutationResult = Apollo.MutationResult<ArchiveChecklistItemMutation>;
 export type ArchiveChecklistItemMutationOptions = Apollo.BaseMutationOptions<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>;
+export const CreateChecklistDocument = gql`
+    mutation createChecklist($data: ChecklistInput!) {
+  createList(data: $data) {
+    checklist {
+      id
+      name
+    }
+  }
+}
+    `;
+export type CreateChecklistMutationFn = Apollo.MutationFunction<CreateChecklistMutation, CreateChecklistMutationVariables>;
+
+/**
+ * __useCreateChecklistMutation__
+ *
+ * To run a mutation, you first call `useCreateChecklistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChecklistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChecklistMutation, { data, loading, error }] = useCreateChecklistMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CreateChecklistMutation, CreateChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateChecklistMutation, CreateChecklistMutationVariables>(CreateChecklistDocument, options);
+      }
+export type CreateChecklistMutationHookResult = ReturnType<typeof useCreateChecklistMutation>;
+export type CreateChecklistMutationResult = Apollo.MutationResult<CreateChecklistMutation>;
+export type CreateChecklistMutationOptions = Apollo.BaseMutationOptions<CreateChecklistMutation, CreateChecklistMutationVariables>;
 export const CreateChecklistItemDocument = gql`
     mutation createChecklistItem($data: ChecklistItemInput!) {
   createListItem(data: $data) {
