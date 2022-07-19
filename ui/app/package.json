@@ -5,13 +5,13 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@apollo/client": "^3.6.9",
-    "antd": "^4.21.6",
+    "antd": "^4.21.7",
     "graphql": "^16.5.0",
-    "i18next": "^21.8.11",
+    "i18next": "^21.8.14",
     "i18next-http-backend": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^11.17.4",
+    "react-i18next": "^11.18.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "typescript": "^4.7.4"
@@ -42,14 +42,14 @@
     ]
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.4",
-    "@graphql-codegen/introspection": "^2.1.1",
-    "@graphql-codegen/typescript": "^2.5.1",
-    "@graphql-codegen/typescript-operations": "^2.4.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.2.16",
+    "@graphql-codegen/cli": "^2.8.1",
+    "@graphql-codegen/introspection": "^2.2.0",
+    "@graphql-codegen/typescript": "^2.7.1",
+    "@graphql-codegen/typescript-operations": "^2.5.1",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.1",
     "@types/graphql": "^14.5.0",
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.5",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3"
   },
   "proxy": "http://0.0.0.0:8000"
