@@ -160,3 +160,35 @@ class RestoreDeletedChecklist(Mutation):
             return RestoreDeletedChecklist(checklist=list_model)
         except ObjectDoesNotExist:
             return RestoreDeletedChecklist(checklist=None)
+
+
+class CopyChecklist(Mutation):
+    class Arguments:
+        list_id = ID()
+
+    checklist = Field(Checklist)
+
+    @classmethod
+    @user_passes_test(lambda user: user.has_perm('api.add_checklist'), exc=PermissionDenied)
+    def mutate(cls, _root, _info, list_id):
+        try:
+            list_model = ChecklistModel.objects.get(pk=list_id, deleted=False)
+            if list_model:
+                new_model = ChecklistModel(
+                    name=list_model.name,
+                )
+                new_model.save()
+                for item in list_model.items.filter(deleted=False):
+                    new_item_model = ChecklistItemModel(
+                        description=item.description,
+                        due=item.due,
+                        list=new_model,
+                        status='NOT_STARTED',
+                    )
+                    new_item_model.save()
+                    new_item_model.people.set(item.people.all())
+                    new_item_model.save()
+                return CopyChecklist(checklist=new_model)
+            return CopyChecklist(checklist=None)
+        except ObjectDoesNotExist:
+            return CopyChecklist(checklist=None)

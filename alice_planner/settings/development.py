@@ -1,3 +1,5 @@
+from time import strftime
+
 from .base import *
 from datetime import timedelta
 
@@ -43,7 +45,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': APP_DIR / 'logs' / 'planner.log',
+            'filename': APP_DIR / 'logs' / 'planner_{}.log'.format(strftime('%Y_%m_%d')),
             'formatter': 'verbose',
         }
     },
