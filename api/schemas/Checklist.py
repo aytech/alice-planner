@@ -23,8 +23,15 @@ class ChecklistQuery(ObjectType):
     @classmethod
     def resolve_checklists(cls, _root, _info):
         try:
-            return ChecklistModel.objects.filter(deleted=False).filter(archived=False).prefetch_related(
-                Prefetch('items', queryset=ChecklistItemModel.objects.filter(deleted=False).filter(archived=False)))
+            return ChecklistModel.objects \
+                .filter(deleted=False) \
+                .filter(archived=False) \
+                .order_by('-created') \
+                .prefetch_related(Prefetch('items',
+                                           queryset=ChecklistItemModel.objects
+                                           .filter(deleted=False)
+                                           .filter(archived=False)
+                                           .order_by('-created')))
         except ObjectDoesNotExist:
             return None
 

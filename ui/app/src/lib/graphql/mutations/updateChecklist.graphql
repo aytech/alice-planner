@@ -1,0 +1,8 @@
+mutation updateChecklist($data: ExistingChecklistInput!) {
+  updateList(data: $data) {
+    checklist {
+      id
+      name
+    }
+  }
+}

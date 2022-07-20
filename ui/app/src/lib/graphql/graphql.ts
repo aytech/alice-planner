@@ -353,6 +353,13 @@ export type TokenAuthMutationVariables = Exact<{
 
 export type TokenAuthMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', payload: any, refreshExpiresIn: number, refreshToken: string, token: string, user?: { __typename?: 'User', id: string, avatar?: string | null, color?: string | null, name?: string | null, surname?: string | null } | null } | null };
 
+export type UpdateChecklistMutationVariables = Exact<{
+  data: ExistingChecklistInput;
+}>;
+
+
+export type UpdateChecklistMutation = { __typename?: 'Mutation', updateList?: { __typename?: 'UpdateChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
 export type UpdateChecklistItemMutationVariables = Exact<{
   data: ExistingChecklistItemInput;
 }>;
@@ -752,6 +759,42 @@ export function useTokenAuthMutation(baseOptions?: Apollo.MutationHookOptions<To
 export type TokenAuthMutationHookResult = ReturnType<typeof useTokenAuthMutation>;
 export type TokenAuthMutationResult = Apollo.MutationResult<TokenAuthMutation>;
 export type TokenAuthMutationOptions = Apollo.BaseMutationOptions<TokenAuthMutation, TokenAuthMutationVariables>;
+export const UpdateChecklistDocument = gql`
+    mutation updateChecklist($data: ExistingChecklistInput!) {
+  updateList(data: $data) {
+    checklist {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateChecklistMutationFn = Apollo.MutationFunction<UpdateChecklistMutation, UpdateChecklistMutationVariables>;
+
+/**
+ * __useUpdateChecklistMutation__
+ *
+ * To run a mutation, you first call `useUpdateChecklistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateChecklistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateChecklistMutation, { data, loading, error }] = useUpdateChecklistMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateChecklistMutation(baseOptions?: Apollo.MutationHookOptions<UpdateChecklistMutation, UpdateChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateChecklistMutation, UpdateChecklistMutationVariables>(UpdateChecklistDocument, options);
+      }
+export type UpdateChecklistMutationHookResult = ReturnType<typeof useUpdateChecklistMutation>;
+export type UpdateChecklistMutationResult = Apollo.MutationResult<UpdateChecklistMutation>;
+export type UpdateChecklistMutationOptions = Apollo.BaseMutationOptions<UpdateChecklistMutation, UpdateChecklistMutationVariables>;
 export const UpdateChecklistItemDocument = gql`
     mutation updateChecklistItem($data: ExistingChecklistItemInput!) {
   updateListItem(data: $data) {
