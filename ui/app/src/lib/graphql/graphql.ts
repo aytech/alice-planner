@@ -85,6 +85,11 @@ export enum ChecklistItemStatus {
   NotStarted = 'NOT_STARTED'
 }
 
+export type CopyChecklist = {
+  __typename?: 'CopyChecklist';
+  checklist?: Maybe<Checklist>;
+};
+
 export type CreateChecklist = {
   __typename?: 'CreateChecklist';
   checklist?: Maybe<Checklist>;
@@ -123,6 +128,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   archiveList?: Maybe<ArchiveChecklist>;
   archiveListItem?: Maybe<ArchiveChecklistItem>;
+  copyList?: Maybe<CopyChecklist>;
   createList?: Maybe<CreateChecklist>;
   createListItem?: Maybe<CreateChecklistItem>;
   deleteList?: Maybe<DeleteChecklist>;
@@ -144,6 +150,11 @@ export type MutationArchiveListArgs = {
 
 export type MutationArchiveListItemArgs = {
   itemId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type MutationCopyListArgs = {
+  listId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -285,6 +296,13 @@ export type ArchiveChecklistItemMutationVariables = Exact<{
 
 export type ArchiveChecklistItemMutation = { __typename?: 'Mutation', archiveListItem?: { __typename?: 'ArchiveChecklistItem', checklistItem?: { __typename?: 'ChecklistItem', id: string, description: string } | null } | null };
 
+export type CopyChecklistMutationVariables = Exact<{
+  listId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type CopyChecklistMutation = { __typename?: 'Mutation', copyList?: { __typename?: 'CopyChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
 export type CreateChecklistMutationVariables = Exact<{
   data: ChecklistInput;
 }>;
@@ -305,6 +323,13 @@ export type DeleteChecklistMutationVariables = Exact<{
 
 
 export type DeleteChecklistMutation = { __typename?: 'Mutation', deleteList?: { __typename?: 'DeleteChecklist', checklist?: { __typename?: 'Checklist', id: string, name: string } | null } | null };
+
+export type DeleteChecklistItemMutationVariables = Exact<{
+  itemId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type DeleteChecklistItemMutation = { __typename?: 'Mutation', deleteListItem?: { __typename?: 'DeleteChecklistItem', checklistItem?: { __typename?: 'ChecklistItem', id: string, description: string } | null } | null };
 
 export type RefreshTokenMutationVariables = Exact<{
   refreshToken: Scalars['String'];
@@ -423,6 +448,42 @@ export function useArchiveChecklistItemMutation(baseOptions?: Apollo.MutationHoo
 export type ArchiveChecklistItemMutationHookResult = ReturnType<typeof useArchiveChecklistItemMutation>;
 export type ArchiveChecklistItemMutationResult = Apollo.MutationResult<ArchiveChecklistItemMutation>;
 export type ArchiveChecklistItemMutationOptions = Apollo.BaseMutationOptions<ArchiveChecklistItemMutation, ArchiveChecklistItemMutationVariables>;
+export const CopyChecklistDocument = gql`
+    mutation copyChecklist($listId: ID) {
+  copyList(listId: $listId) {
+    checklist {
+      id
+      name
+    }
+  }
+}
+    `;
+export type CopyChecklistMutationFn = Apollo.MutationFunction<CopyChecklistMutation, CopyChecklistMutationVariables>;
+
+/**
+ * __useCopyChecklistMutation__
+ *
+ * To run a mutation, you first call `useCopyChecklistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCopyChecklistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [copyChecklistMutation, { data, loading, error }] = useCopyChecklistMutation({
+ *   variables: {
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useCopyChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CopyChecklistMutation, CopyChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CopyChecklistMutation, CopyChecklistMutationVariables>(CopyChecklistDocument, options);
+      }
+export type CopyChecklistMutationHookResult = ReturnType<typeof useCopyChecklistMutation>;
+export type CopyChecklistMutationResult = Apollo.MutationResult<CopyChecklistMutation>;
+export type CopyChecklistMutationOptions = Apollo.BaseMutationOptions<CopyChecklistMutation, CopyChecklistMutationVariables>;
 export const CreateChecklistDocument = gql`
     mutation createChecklist($data: ChecklistInput!) {
   createList(data: $data) {
@@ -542,6 +603,42 @@ export function useDeleteChecklistMutation(baseOptions?: Apollo.MutationHookOpti
 export type DeleteChecklistMutationHookResult = ReturnType<typeof useDeleteChecklistMutation>;
 export type DeleteChecklistMutationResult = Apollo.MutationResult<DeleteChecklistMutation>;
 export type DeleteChecklistMutationOptions = Apollo.BaseMutationOptions<DeleteChecklistMutation, DeleteChecklistMutationVariables>;
+export const DeleteChecklistItemDocument = gql`
+    mutation deleteChecklistItem($itemId: ID) {
+  deleteListItem(itemId: $itemId) {
+    checklistItem {
+      id
+      description
+    }
+  }
+}
+    `;
+export type DeleteChecklistItemMutationFn = Apollo.MutationFunction<DeleteChecklistItemMutation, DeleteChecklistItemMutationVariables>;
+
+/**
+ * __useDeleteChecklistItemMutation__
+ *
+ * To run a mutation, you first call `useDeleteChecklistItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteChecklistItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteChecklistItemMutation, { data, loading, error }] = useDeleteChecklistItemMutation({
+ *   variables: {
+ *      itemId: // value for 'itemId'
+ *   },
+ * });
+ */
+export function useDeleteChecklistItemMutation(baseOptions?: Apollo.MutationHookOptions<DeleteChecklistItemMutation, DeleteChecklistItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteChecklistItemMutation, DeleteChecklistItemMutationVariables>(DeleteChecklistItemDocument, options);
+      }
+export type DeleteChecklistItemMutationHookResult = ReturnType<typeof useDeleteChecklistItemMutation>;
+export type DeleteChecklistItemMutationResult = Apollo.MutationResult<DeleteChecklistItemMutation>;
+export type DeleteChecklistItemMutationOptions = Apollo.BaseMutationOptions<DeleteChecklistItemMutation, DeleteChecklistItemMutationVariables>;
 export const RefreshTokenDocument = gql`
     mutation refreshToken($refreshToken: String!) {
   refreshToken(refreshToken: $refreshToken) {

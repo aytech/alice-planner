@@ -147,6 +147,7 @@ export const Checklist = ({
           cancel={ cancel }
           edit={ edit }
           record={ record }
+          refetch={ refetch }
           save={ save } />
       ),
       title: '',

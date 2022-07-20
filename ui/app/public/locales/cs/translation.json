@@ -3,9 +3,10 @@
   "archive": "Archivovat",
   "archive-list": "Archivovat seznam",
   "cancel": "Zrušit",
-  "delete-list": "Vymazat seznam",
+  "delete-item": "Odstranit úkol",
+  "delete-list": "Odstranit seznam",
   "description": "Popis",
-  "due-date": "Splatnost",
+  "due-date": "Termín",
   "edit": "Upravit",
   "errors": {
     "more-coming": "Ale určitě na něčem pracujeme",
@@ -31,6 +32,7 @@
     }
   },
   "go-home": "Přejít na úvod",
+  "item-deleted": "Úkol {{ description }} je odstraněn",
   "login": "Přihlásit",
   "loggin-in": "Přihlášení",
   "nav": {

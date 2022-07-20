@@ -1,0 +1,8 @@
+mutation copyChecklist($listId: ID) {
+  copyList(listId: $listId) {
+    checklist {
+      id
+      name
+    }
+  }
+}
