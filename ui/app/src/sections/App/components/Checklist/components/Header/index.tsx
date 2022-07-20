@@ -1,8 +1,8 @@
-import { DeleteOutlined, SnippetsOutlined } from "@ant-design/icons"
+import { AppstoreAddOutlined, CopyOutlined, DeleteOutlined } from "@ant-design/icons"
 import { ApolloError, useMutation } from "@apollo/client"
-import { Button, Col, message, Row, Spin, Tooltip } from "antd"
+import { Button, Col, message, Row, Space, Spin, Tooltip } from "antd"
 import { useTranslation } from "react-i18next"
-import { ArchiveChecklistDocument, ArchiveChecklistMutation, ArchiveChecklistMutationVariables, DeleteChecklistDocument, DeleteChecklistMutation, DeleteChecklistMutationVariables } from "../../../../../../lib/graphql/graphql"
+import { ArchiveChecklistDocument, ArchiveChecklistMutation, ArchiveChecklistMutationVariables, CopyChecklistDocument, CopyChecklistMutation, CopyChecklistMutationVariables, DeleteChecklistDocument, DeleteChecklistMutation, DeleteChecklistMutationVariables } from "../../../../../../lib/graphql/graphql"
 import { IChecklistTable } from "../../../../../../lib/Types"
 import "./styles.css"
 
@@ -38,8 +38,20 @@ export const Header = ({
     }
   })
 
+  const [ copyList, { loading: copyLoading } ] = useMutation<CopyChecklistMutation, CopyChecklistMutationVariables>(CopyChecklistDocument, {
+    onCompleted: (_: CopyChecklistMutation) => {
+      message.info(t("done"))
+      refetch()
+    },
+    onError: (error: ApolloError) => message.error(error.message)
+  })
+
   const archive = () => {
     archiveList({ variables: { listId: list.id } })
+  }
+
+  const copy = () => {
+    copyList({ variables: { listId: list.id } })
   }
 
   const remove = () => {
@@ -48,7 +60,11 @@ export const Header = ({
 
   return (
     <Spin
-      spinning={ archiveLoading || removeLoading }
+      spinning={
+        archiveLoading
+        || copyLoading
+        || removeLoading
+      }
       tip={ t("processing") }>
       <Row>
         <Col
@@ -59,25 +75,19 @@ export const Header = ({
         <Col
           className="header-actions"
           sm={ 12 } xs={ 24 }>
-          <Row>
-            <Col xs={ 8 } md={ 18 } />
-            <Col
-              className="header-action"
-              xs={ 8 } md={ 3 }>
-              <Tooltip title={ t("archive-list") } placement="top">
-                <Button icon={ <SnippetsOutlined /> } onClick={ archive } />
-              </Tooltip>
-            </Col>
-            <Col
-              className="header-action"
-              sm={ 8 } md={ 3 }>
-              <Tooltip title={ t("delete-list") } placement="top">
-                <Button
-                  icon={ <DeleteOutlined /> }
-                  onClick={ remove } />
-              </Tooltip>
-            </Col>
-          </Row>
+          <Space>
+            <Tooltip title={ t("copy-list") } placement="top">
+              <Button icon={ <CopyOutlined /> } onClick={ copy } />
+            </Tooltip>
+            <Tooltip title={ t("archive-list") } placement="top">
+              <Button icon={ <AppstoreAddOutlined /> } onClick={ archive } />
+            </Tooltip>
+            <Tooltip title={ t("delete-list") } placement="top">
+              <Button
+                icon={ <DeleteOutlined /> }
+                onClick={ remove } />
+            </Tooltip>
+          </Space>
         </Col>
       </Row>
     </Spin>

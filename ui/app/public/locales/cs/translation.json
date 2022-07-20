@@ -3,9 +3,11 @@
   "archive": "Archivovat",
   "archive-list": "Archivovat seznam",
   "cancel": "Zrušit",
+  "copy-list": "Duplikovat seznam",
   "delete-item": "Odstranit úkol",
   "delete-list": "Odstranit seznam",
   "description": "Popis",
+  "done": "Hotovo",
   "due-date": "Termín",
   "edit": "Upravit",
   "errors": {
