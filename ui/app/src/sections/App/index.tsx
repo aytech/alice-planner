@@ -4,7 +4,7 @@ import { Skeleton } from "antd"
 import Layout, { Content, Header } from "antd/lib/layout/layout"
 import React, { useEffect, useState } from "react"
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import { appUser, peopleData, selectedPage } from "../../cache"
+import { appUser, peopleData } from "../../cache"
 import { paths, sessionStorageKeys } from "../../lib/Constants"
 import { ChecklistItemStatus, ChecklistsDocument, ChecklistsQuery, useAppQuery, UserDocument, UserQuery } from "../../lib/graphql/graphql"
 import { UrlHelper } from "../../lib/Helpers"
@@ -86,10 +86,6 @@ export const App = () => {
     setChecklists(list)
     peopleData(userItems)
   }, [ listsData ])
-
-  useEffect(() => {
-    selectedPage("app")
-  }, [ location ])
 
   const AppContent = ({ children }: { children: any }) => (
     <>

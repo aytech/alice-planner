@@ -42,5 +42,3 @@ export interface IChecklistTable {
   items?: Array<IChecklistTableItem>
   name?: string | null
 }
-
-export type MenuItemKey = "app" | "archive"

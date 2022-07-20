@@ -1,9 +1,9 @@
 import { CarryOutOutlined, DatabaseOutlined } from "@ant-design/icons"
 import { Menu } from "antd"
 import Sider from "antd/lib/layout/Sider"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
-import { selectedPage } from "../../../../cache"
+import { Link, useLocation } from "react-router-dom"
 import { paths } from "../../../../lib/Constants"
 
 interface Props {
@@ -14,7 +14,37 @@ export const NavColumn = ({
   collapsed
 }: Props) => {
 
+  const location = useLocation()
   const { t } = useTranslation()
+
+  const [ selectedPages, setSelectedPages ] = useState<string[]>([])
+
+  const getItem = (key: string, icon: React.ReactNode, label: React.ReactNode) => {
+    return { key, icon, label }
+  }
+
+  const menuItems = [
+    getItem("1", <CarryOutOutlined />, (
+      <Link to={ paths.root }>
+        { collapsed ? '' : t("nav.active") }
+      </Link>
+    )),
+    getItem("2", <DatabaseOutlined />, (
+      <Link to={ paths.archive }>
+        { collapsed ? '' : t("nav.archived") }
+      </Link>
+    ))
+  ]
+
+  useEffect(() => {
+    switch(location.pathname) {
+      case "/archive":
+        setSelectedPages(["2"])
+        break
+      default:
+        setSelectedPages(["1"])
+    }
+  }, [ location ])
 
   return (
     <Sider
@@ -26,27 +56,8 @@ export const NavColumn = ({
         theme="dark"
         mode="inline"
         defaultSelectedKeys={ [ '1' ] }
-        items={ [
-          {
-            key: 'app',
-            icon: <CarryOutOutlined />,
-            label: (
-              <Link to={ paths.root }>
-                { collapsed ? '' : t("nav.active") }
-              </Link>
-            )
-          },
-          {
-            key: 'archive',
-            icon: <DatabaseOutlined />,
-            label: (
-              <Link to={ paths.archive }>
-                { collapsed ? '' : t("nav.archived") }
-              </Link>
-            )
-          }
-        ] }
-        selectedKeys={ [ selectedPage() ] }
+        items={ menuItems }
+        selectedKeys={ selectedPages }
       />
     </Sider>
   )
