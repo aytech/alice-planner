@@ -1,5 +1,4 @@
 import { CarryOutOutlined, DatabaseOutlined } from "@ant-design/icons"
-import { useReactiveVar } from "@apollo/client"
 import { Menu } from "antd"
 import Sider from "antd/lib/layout/Sider"
 import { useTranslation } from "react-i18next"
@@ -16,7 +15,6 @@ export const NavColumn = ({
 }: Props) => {
 
   const { t } = useTranslation()
-  const activePage = useReactiveVar(selectedPage)
 
   return (
     <Sider
@@ -48,7 +46,7 @@ export const NavColumn = ({
             )
           }
         ] }
-        selectedKeys={ [ activePage ] }
+        selectedKeys={ [ selectedPage() ] }
       />
     </Sider>
   )
