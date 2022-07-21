@@ -40,13 +40,13 @@ urlpatterns = [
     # GraphQL
     re_path(r'^api$', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
 
-    # Admin section
-    re_path('admin/', admin.site.urls),
-
     # Static
     re_path(r'^static/(?P<path>.*)$', serve, {
         'document_root': settings.STATIC_ROOT,
     }),
+
+    # Admin section
+    re_path('admin/', admin.site.urls),
 
     # UI locales
     re_path(r'^locales/(?P<path>.*)$', serve, {
